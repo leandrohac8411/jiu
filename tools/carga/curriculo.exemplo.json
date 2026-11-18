@@ -1,0 +1,19 @@
+[
+ {
+  "programa": "GB1",
+  "semana": 1,
+  "aulaA": {
+   "tema": "Exemplo: posição e técnicas",
+   "tecnicas": [
+    {
+     "nome": "Nome da técnica",
+     "categoria": "Guarda"
+    }
+   ]
+  },
+  "aulaB": {
+   "tema": "...",
+   "tecnicas": []
+  }
+ }
+]

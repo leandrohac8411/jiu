@@ -1,0 +1,26 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Só estes dois e-mails entram (em minúsculas). Mantenha igual a USERS em js/firebase-config.js.
+    function permitido() {
+      return request.auth != null
+        && request.auth.token.email in [
+          'leandrohacarvalho@gmail.com',
+          'strandrade@gmail.com'
+        ];
+    }
+
+    // Dados de cada pessoa: só ela lê e grava.
+    match /usuarios/{uid}/{document=**} {
+      allow read, write: if permitido() && request.auth.uid == uid;
+    }
+    match /usuarios/{uid} {
+      allow read, write: if permitido() && request.auth.uid == uid;
+    }
+
+    // Compartilhado entre os dois.
+    match /grade/{id} { allow read, write: if permitido(); }
+    match /curriculo/{id} { allow read, write: if permitido(); }
+    match /config/{id} { allow read, write: if permitido(); }
+  }
+}
