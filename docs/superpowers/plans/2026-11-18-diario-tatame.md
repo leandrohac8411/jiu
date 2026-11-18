@@ -32,7 +32,7 @@
 
 ---
 
-### Tarefa 0: Preparar Firebase, GitHub e Vercel (o Leandro faz, com o passo a passo)
+### Task 0: Preparar Firebase, GitHub e Vercel (o Leandro faz, com o passo a passo)
 
 **Arquivos:** nenhum.
 
@@ -43,7 +43,7 @@
 
 Verificação: o login das duas contas aparece em Authentication → Usuários.
 
-### Tarefa 1: Esqueleto do app, login e navegação
+### Task 1: Esqueleto do app, login e navegação
 
 **Arquivos:**
 - Criar: `index.html`, `css/app.css`, `js/firebase-config.js`, `js/firebase.js`, `js/app.js`, `js/ui/icones.js`, `js/telas/login.js`, `package.json`, `.gitignore`, `README.md`
@@ -82,7 +82,7 @@ Verificação: o login das duas contas aparece em Authentication → Usuários.
   - abrir, entrar com uma das contas e ver a rota mudar para `#inicio`, com o menu de 5 itens e o item ativo em vermelho.
 - [ ] **Passo 8:** commit: `feat: esqueleto, login e navegação`.
 
-### Tarefa 2: Ciclo GB (semana, aula A/B, aprendizado da turma)
+### Task 2: Ciclo GB (semana, aula A/B, aprendizado da turma)
 
 **Arquivos:**
 - Criar: `js/logica/ciclo.js`
@@ -115,7 +115,7 @@ Verificação: o login das duas contas aparece em Authentication → Usuários.
 - [ ] **Passo 4:** rodar `npm test` → PASSA.
 - [ ] **Passo 5:** commit: `feat: cálculo do ciclo GB e aula A/B`.
 
-### Tarefa 3: Categorias IBJJF de idade e peso
+### Task 3: Categorias IBJJF de idade e peso
 
 **Arquivos:**
 - Criar: `js/logica/categorias.js`
@@ -146,7 +146,7 @@ Verificação: o login das duas contas aparece em Authentication → Usuários.
 - [ ] **Passo 4:** rodar `npm test` → PASSA.
 - [ ] **Passo 5:** commit: `feat: categorias IBJJF de idade e peso`.
 
-### Tarefa 4: Contagem, metas e "para revisar"
+### Task 4: Contagem, metas e "para revisar"
 
 **Arquivos:**
 - Criar: `js/logica/metas.js`
@@ -179,7 +179,7 @@ Verificação: o login das duas contas aparece em Authentication → Usuários.
 - [ ] **Passo 4:** rodar `npm test` → PASSA.
 - [ ] **Passo 5:** commit: `feat: contagem de aulas, metas e lista de revisão`.
 
-### Tarefa 5: Meu jogo (notas por posição)
+### Task 5: Meu jogo (notas por posição)
 
 **Arquivos:**
 - Criar: `js/logica/meujogo.js`
@@ -212,7 +212,7 @@ Verificação: o login das duas contas aparece em Authentication → Usuários.
 - [ ] **Passo 4:** rodar `npm test` → PASSA.
 - [ ] **Passo 5:** commit: `feat: cálculo do Meu jogo`.
 
-### Tarefa 6: Camada de dados, regras do Firestore e carga inicial
+### Task 6: Camada de dados, regras do Firestore e carga inicial
 
 **Arquivos:**
 - Criar: `js/dados.js`, `firestore.rules`, `tools/carga/carregar.mjs`, `tools/carga/package.json`, `tools/carga/grade.json`, `tools/carga/curriculo.exemplo.json`
@@ -262,7 +262,7 @@ Verificação: o login das duas contas aparece em Authentication → Usuários.
   - no console do navegador, ler `usuarios/<uid da outra pessoa>` retorna `permission-denied`.
 - [ ] **Passo 6:** commit (o `curriculo.json` não entra): `feat: camada de dados, regras e carga inicial`.
 
-### Tarefa 7: Componentes visuais e tela Início
+### Task 7: Componentes visuais e tela Início
 
 **Arquivos:**
 - Criar: `js/ui/faixa.js`, `js/ui/graficos.js`, `js/telas/inicio.js`
@@ -295,7 +295,7 @@ Verificação: o login das duas contas aparece em Authentication → Usuários.
   - numa quarta, as turmas são 12h30, 19h e 20h.
 - [ ] **Passo 5:** commit: `feat: tela Início`.
 
-### Tarefa 8: Check-in, foto e currículo que se completa
+### Task 8: Check-in, foto e currículo que se completa
 
 **Arquivos:**
 - Criar: `js/telas/checkin.js`, `js/foto.js`
@@ -334,7 +334,7 @@ Verificação: o login das duas contas aparece em Authentication → Usuários.
   - um arquivo `.txt` renomeado para `.jpg` mostra a mensagem de erro e a aula salva sem foto.
 - [ ] **Passo 7:** commit: `feat: check-in com foto e currículo que se completa`.
 
-### Tarefa 9: Grade, Diário e Aula aberta
+### Task 9: Grade, Diário e Aula aberta
 
 **Arquivos:**
 - Criar: `js/telas/grade.js`, `js/telas/diario.js`, `js/telas/aula.js`
@@ -369,7 +369,7 @@ Verificação: o login das duas contas aparece em Authentication → Usuários.
   - o filtro "Com foto" mostra só as aulas com foto.
 - [ ] **Passo 5:** commit: `feat: Grade, Diário e Aula aberta`.
 
-### Tarefa 10: Evolução, Meu jogo e Perfil
+### Task 10: Evolução, Meu jogo e Perfil
 
 **Arquivos:**
 - Criar: `js/telas/evolucao.js`, `js/telas/perfil.js`
@@ -397,7 +397,7 @@ Verificação: o login das duas contas aparece em Authentication → Usuários.
   - Meu jogo com zero aulas mostra a mensagem de vazio, sem erro no console.
 - [ ] **Passo 4:** commit: `feat: Evolução, Meu jogo e Perfil`.
 
-### Tarefa 11: PWA e publicação na Vercel
+### Task 11: PWA e publicação na Vercel
 
 **Arquivos:**
 - Criar: `manifest.webmanifest`, `sw.js`, `img/icon-192.png`, `img/icon-512.png`, `img/icon-maskable-512.png`, `img/apple-touch-icon.png`, `vercel.json`
