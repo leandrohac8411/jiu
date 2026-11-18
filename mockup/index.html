@@ -1,0 +1,650 @@
+<!doctype html>
+<html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Diário de Tatame — estilos</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Manrope:wght@400;600;800&display=swap">
+<style>
+/* Página: todas as telas do app em grade de celulares, na ordem do uso; atalhos no topo */
+:root{
+  --bg:#f4f3f2; --fg:#17171a; --muted:#666270; --line:#e0dcdb; --accent:#c8201b;
+  --f-ui:"Manrope",system-ui,sans-serif; --f-app:"Sora","Manrope",sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#121112; --fg:#efeded; --muted:#a29da6; --line:#2c292c; --accent:#ff5a4f; color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#121112; --fg:#efeded; --muted:#a29da6; --line:#2c292c; --accent:#ff5a4f; color-scheme:dark}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}}
+body{background:var(--bg);color:var(--fg);font-family:var(--f-ui);font-size:15px;line-height:1.5}
+.wrap{max-width:1100px;margin:0 auto;padding-block:28px 48px;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+h1{font-family:var(--f-app);font-weight:800;font-size:clamp(24px,5.5vw,34px);line-height:1.12;margin:0 0 8px;text-wrap:balance}
+.lead{color:var(--muted);max-width:64ch;margin:0 0 16px}
+.jump{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 30px}
+.jump a{font-size:13px;font-weight:700;color:var(--fg);text-decoration:none;border:1px solid var(--line);border-radius:99px;padding:6px 12px}
+.jump a:hover,.jump a:focus-visible{border-color:var(--accent);color:var(--accent);outline:none}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:44px 32px;align-items:start}
+.opt{display:flex;flex-direction:column;align-items:center;gap:14px;min-width:0;scroll-margin-top:16px}
+.cap{width:100%;max-width:340px}
+.cap h2{margin:0;font-size:17px;font-weight:800;font-family:var(--f-app);display:flex;gap:8px;align-items:baseline}
+.cap h2 b{color:var(--accent);font-size:13px}
+.cap p{margin:4px 0 0;color:var(--muted);font-size:14px}
+.note{margin-top:36px;font-size:13px;color:var(--muted);border-top:1px solid var(--line);padding-top:14px}
+
+/* ===== Celular ===== */
+.phone{width:100%;max-width:340px;border-radius:40px;padding:10px;background:#0b0b0d;box-shadow:0 22px 50px -24px rgba(0,0,0,.55)}
+.screen{border-radius:31px;overflow:hidden;height:700px;display:flex;flex-direction:column;background:#faf9f8;color:#151517;font-family:var(--f-app);font-size:13px}
+.sb{display:flex;justify-content:space-between;font-size:11px;font-weight:600;padding:10px 22px 4px;flex:none}
+.sb .ex{font-size:10px;letter-spacing:.06em;text-transform:uppercase;opacity:.55}
+.body{padding:8px 18px 14px;display:flex;flex-direction:column;gap:14px;flex:1;overflow:hidden}
+.belt{display:block;width:100%;height:auto}
+.ttl{display:flex;align-items:center;gap:10px;font-size:22px;font-weight:800;margin:2px 0 0}
+.ttl .back{width:34px;height:34px;border-radius:50%;background:#efecea;display:grid;place-items:center;font-size:16px;flex:none}
+.k{font-size:10.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#7b757d}
+.card{background:#fff;border:1px solid #ebe7e6;border-radius:18px;padding:12px}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{font-size:11.5px;font-weight:600;padding:6px 10px;border-radius:99px;background:#efecea;color:#3d3a40}
+.chip.on{background:#151517;color:#fff}
+.chip.add{background:transparent;border:1px dashed #c9c3c2;color:#7b757d}
+.btn{display:block;text-align:center;font-weight:800;font-size:14px;border-radius:16px;padding:13px;background:#c8201b;color:#fff}
+.btn.dark{background:#151517}
+.btn.ghost{background:#efecea;color:#151517}
+
+/* Topo do Início */
+.hrow{display:flex;align-items:center;gap:10px}
+.logo{width:42px;height:42px;border-radius:50%;border:2px dashed currentColor;opacity:.6;display:grid;place-items:center;font-size:8.5px;font-weight:700;text-align:center;line-height:1.1;flex:none}
+.who{flex:1;line-height:1.2}
+.who small{font-size:11.5px;opacity:.7}
+.who b{display:block;font-size:24px}
+.who b::after{content:"";display:block;width:26px;height:3px;background:#c8201b;margin-top:6px;border-radius:2px}
+.foto{position:relative;flex:none;width:52px;height:52px;border-radius:50%;display:grid;place-items:center;font-weight:800;font-size:20px;color:#fff;
+  background:linear-gradient(140deg,#3a3a40,#16161a);box-shadow:0 0 0 3px #fff,0 0 0 5px #2449c9}
+.foto i{position:absolute;right:-4px;bottom:-4px;width:20px;height:20px;border-radius:50%;background:#c8201b;font-style:normal;font-size:10px;display:grid;place-items:center;box-shadow:0 0 0 2px #fff}
+.beltwrap{border-radius:16px;padding:12px 12px 8px;background:#fff;border:1px solid #ebe7e6}
+.lbl{display:flex;justify-content:space-between;font-size:10.5px;margin-top:6px;color:#6d6870}
+
+/* Cartão vermelho */
+.prog{background:#c8201b;color:#fff;border-radius:22px;padding:16px;display:flex;flex-direction:column;gap:14px}
+.ptop{display:grid;grid-template-columns:auto 1fr;gap:14px;align-items:center}
+.ring{position:relative;width:88px;height:88px}
+.ring svg{width:100%;height:100%;transform:rotate(-90deg)}
+.ring b{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;line-height:1;font-size:30px}
+.ring b small{font-size:10.5px;font-weight:600;opacity:.8;margin-top:4px}
+.ptop h3{margin:0 0 10px;font-size:17px}
+.journey{display:grid;grid-template-columns:auto 1fr auto;gap:8px;align-items:center;background:#fff;border-radius:99px;padding:6px 10px}
+.mb{display:block;width:34px;height:9px;border-radius:2px;position:relative}
+.mb::after{content:"";position:absolute;right:4px;top:0;bottom:0;width:8px;background:#111}
+.mb.az{background:#2449c9}.mb.rx{background:#6b2fa8}
+.jt{height:4px;border-radius:2px;background:#ece8e7;position:relative;overflow:hidden}
+.jt span{position:absolute;left:0;top:0;bottom:0;width:2%;background:linear-gradient(90deg,#2449c9,#6b2fa8)}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid rgba(255,255,255,.25);padding-top:12px}
+.stats div{display:flex;flex-direction:column;align-items:center;gap:2px}
+.stats div+div{border-left:1px solid rgba(255,255,255,.25)}
+.stats b{font-size:18px;line-height:1.1}
+.stats small{font-size:10px;opacity:.85;text-transform:uppercase;letter-spacing:.05em}
+
+/* Linhas de aula */
+.sec{font-size:12px;font-weight:700;color:#6d6870;display:flex;justify-content:space-between}
+.cls{display:flex;flex-direction:column;gap:8px}
+.row{display:grid;grid-template-columns:50px 1fr auto;gap:10px;align-items:center;background:#fff;border:1px solid #ebe7e6;border-radius:16px;padding:10px 12px}
+.row .t{font-weight:700;font-size:14px}
+.row .d{font-size:12.5px;font-weight:600;min-width:0}
+.row .d small{display:block;font-weight:400;color:#7b757d;font-size:11px}
+.row .go{font-size:11px;font-weight:700;border-radius:10px;padding:6px 9px;background:#151517;color:#fff}
+.row.next .go{background:#c8201b}
+.row.past{opacity:.5}
+.row.past .go{background:#ebe7e7;color:#555}
+.row .tag{font-size:10px;font-weight:800;padding:3px 7px;border-radius:6px;background:#efecea}
+.row .tag.gb1{background:#fbeceb;color:#c8201b}
+.row .tag.gb2{background:#e8ecfb;color:#2449c9}
+
+/* Menu inferior */
+.nav{margin:auto 10px 12px;display:grid;grid-template-columns:repeat(5,1fr);gap:2px;background:#fff;border:1px solid #ebe7e6;border-radius:24px;padding:8px 6px;box-shadow:0 10px 24px -14px rgba(20,10,10,.35);flex:none}
+.nav a{display:flex;flex-direction:column;align-items:center;gap:4px;padding:7px 0 6px;border-radius:16px;color:#8d878f;font-size:11px;font-weight:600;text-decoration:none}
+.nav svg{width:24px;height:24px;stroke:currentColor;fill:none;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+.nav a.on{color:#c8201b;background:#fbeceb;font-weight:800}
+
+/* Login */
+.login{flex:1;display:flex;flex-direction:column;padding:0 24px 28px;gap:14px;
+  background:radial-gradient(120% 60% at 50% 0%,#fbeceb 0%,#faf9f8 60%)}
+.login .mark{margin:48px auto 4px;width:110px;height:110px;border-radius:50%;border:2px dashed #c8201b;color:#c8201b;display:grid;place-items:center;font-weight:800;font-size:12px;text-align:center}
+.login h3{margin:0;text-align:center;font-size:24px}
+.login p{margin:0 0 10px;text-align:center;color:#7b757d}
+.field{display:flex;flex-direction:column;gap:4px}
+.field label{font-size:11.5px;font-weight:700;color:#6d6870}
+.field div{background:#fff;border:1px solid #e3dfde;border-radius:14px;padding:12px 14px;font-size:13.5px;color:#151517}
+.field div.ph{color:#a9a3a8}
+.login .forgot{text-align:center;font-size:12px;color:#c8201b;font-weight:700}
+.login .stripe{margin-top:auto;height:6px;border-radius:3px;background:linear-gradient(90deg,#c8201b 0 60%,#151517 60% 80%,#2449c9 80%)}
+
+/* Check-in */
+.plan{background:#151517;color:#fff;border-radius:18px;padding:14px}
+.plan .k{color:#b6b0b4}
+.plan h4{margin:6px 0 2px;font-size:15px}
+.plan p{margin:0;font-size:12px;color:#cfc9cc}
+.yn{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
+.yn span{text-align:center;font-weight:800;font-size:12.5px;padding:9px;border-radius:12px;background:rgba(255,255,255,.1)}
+.yn span.on{background:#fff;color:#151517}
+.diff{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-top:8px}
+.diff span{text-align:center;font-weight:800;font-size:13px;padding:8px 0;border-radius:10px;background:#efecea;color:#6d6870}
+.diff span.on{background:#c8201b;color:#fff}
+.diffl{display:flex;justify-content:space-between;font-size:10.5px;color:#8d878f;margin-top:4px}
+.txt{font-size:12.5px;color:#3d3a40;line-height:1.45;margin-top:6px}
+.ph2{display:grid;grid-template-columns:96px 1fr;gap:10px;align-items:center}
+.ph2 .img{height:72px;border-radius:12px;background:linear-gradient(135deg,#2c2c33,#5b5257);position:relative;overflow:hidden}
+.ph2 .img::after{content:"";position:absolute;inset:auto 0 0 0;height:40%;background:linear-gradient(transparent,rgba(0,0,0,.5))}
+.ph2 small{color:#7b757d;font-size:11.5px}
+
+/* Grade */
+.days{display:grid;grid-template-columns:repeat(6,1fr);gap:4px}
+.days span{display:flex;flex-direction:column;align-items:center;padding:7px 0;border-radius:12px;font-size:10.5px;color:#7b757d;font-weight:600}
+.days span b{font-size:15px;color:#151517}
+.days span.on{background:#151517;color:#fff}
+.days span.on b{color:#fff}
+.days span.tod{box-shadow:inset 0 0 0 1.5px #c8201b}
+.cyc{display:flex;flex-direction:column;gap:8px}
+.cycbar{display:grid;grid-template-columns:repeat(16,1fr);gap:3px}
+.cycbar i{height:6px;border-radius:2px;background:#e8e4e3}
+.cycbar i.done{background:#151517}
+.cycbar i.cur{background:#c8201b}
+.cyc h4{margin:0;font-size:14px}
+.cyc p{margin:0;font-size:12px;color:#6d6870}
+.cyc .adj{font-size:11.5px;font-weight:700;color:#c8201b}
+
+/* Diário */
+.review{background:#fbeceb;border:1px solid #f3d3d1;border-radius:18px;padding:12px}
+.review h4{margin:4px 0 6px;font-size:14px}
+.review .chip{background:#fff;color:#c8201b}
+.month{font-size:12px;font-weight:800;color:#6d6870;margin-top:2px}
+.entry{display:grid;grid-template-columns:64px 1fr;gap:10px;align-items:center;background:#fff;border:1px solid #ebe7e6;border-radius:16px;padding:8px}
+.entry .img{height:64px;border-radius:12px;background:linear-gradient(135deg,#2c2c33,#6a5a60)}
+.entry .img.b{background:linear-gradient(135deg,#1f2a4a,#4f5d86)}
+.entry .img.none{background:#efecea;display:grid;place-items:center;color:#a9a3a8;font-size:18px}
+.entry h5{margin:0;font-size:13px}
+.entry small{display:block;color:#7b757d;font-size:11px}
+.dots{display:flex;gap:3px;margin-top:5px}
+.dots i{width:14px;height:5px;border-radius:2px;background:#e8e4e3}
+.dots i.f{background:#c8201b}
+
+/* Aula aberta */
+.hero-ph{position:relative;height:300px;flex:none;color:#fff;
+  background:linear-gradient(180deg,rgba(0,0,0,.35) 0%,transparent 30%,transparent 55%,rgba(0,0,0,.7) 100%),
+  radial-gradient(80% 70% at 40% 45%,#6a5a60 0%,#2c2c33 70%)}
+.ph-top{display:flex;justify-content:space-between;align-items:center;padding:6px 16px}
+.ph-top .back{width:34px;height:34px;border-radius:50%;background:rgba(255,255,255,.2);display:grid;place-items:center;font-size:16px}
+.ph-top .cnt{font-size:11px;font-weight:700;background:rgba(0,0,0,.35);padding:4px 9px;border-radius:99px}
+.ph-cap{position:absolute;left:18px;right:18px;bottom:24px;line-height:1.25}
+.ph-cap small{font-size:11px;opacity:.85}
+.ph-cap b{display:block;font-size:17px}
+.ph-dots{position:absolute;left:0;right:0;bottom:10px;display:flex;justify-content:center;gap:5px}
+.ph-dots i{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,.45)}
+.ph-dots i.on{background:#fff;width:16px;border-radius:3px}
+
+/* Evolução */
+.gauges{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.gauge{background:#fff;border:1px solid #ebe7e6;border-radius:18px;padding:12px 8px 10px;display:flex;flex-direction:column;align-items:center}
+.gauge svg{width:100%;max-width:120px;height:auto}
+.gauge b{font-size:20px;margin-top:-26px}
+.gauge small{font-size:11px;color:#6d6870;text-align:center;line-height:1.3}
+.tabs{display:grid;grid-template-columns:1fr 1fr;background:#efecea;border-radius:14px;padding:4px;gap:4px}
+.tabs span{text-align:center;font-size:12.5px;font-weight:700;padding:8px;border-radius:10px;color:#6d6870}
+.tabs span.on{background:#151517;color:#fff}
+.tl{display:flex;flex-direction:column;position:relative;padding-left:18px}
+.tl::before{content:"";position:absolute;left:5px;top:10px;bottom:10px;width:2px;background:#e3dfde}
+.ev{position:relative;background:#fff;border:1px solid #ebe7e6;border-radius:16px;padding:12px;margin-bottom:10px}
+.ev::before{content:"";position:absolute;left:-18px;top:16px;width:12px;height:12px;border-radius:50%;background:#c8201b;box-shadow:0 0 0 3px #faf9f8}
+.ev.fut{background:transparent;border-style:dashed}
+.ev.fut::before{background:#faf9f8;box-shadow:0 0 0 2px #c9c3c2 inset,0 0 0 3px #faf9f8}
+.ev h4{margin:0 0 8px;font-size:13.5px;display:flex;justify-content:space-between;gap:8px}
+.ev h4 span{font-weight:600;color:#7b757d;font-size:11.5px}
+.ev p{margin:6px 0 0;font-size:11.5px;color:#7b757d}
+
+/* Perfil */
+.pf{display:flex;flex-direction:column;align-items:center;gap:6px;margin-top:4px}
+.pf .foto{width:84px;height:84px;font-size:32px}
+.pf .foto i{width:26px;height:26px;font-size:12px}
+.pf h3{margin:8px 0 0;font-size:20px}
+.pf small{color:#7b757d}
+.kv{display:flex;flex-direction:column}
+.kv div{display:flex;justify-content:space-between;gap:10px;padding:9px 2px;border-bottom:1px solid #f0edec;font-size:12.5px}
+.kv div:last-child{border-bottom:0}
+.kv span{color:#7b757d}
+.kv b{font-weight:600;text-align:right}
+.step{display:flex;align-items:center;gap:10px}
+.step i{font-style:normal;width:28px;height:28px;border-radius:50%;background:#efecea;display:grid;place-items:center;font-weight:800}
+.out{text-align:center;font-weight:700;color:#c8201b;font-size:13px}
+.cats{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.cat{background:#151517;color:#fff;border-radius:16px;padding:10px 12px;display:flex;flex-direction:column;line-height:1.25}
+.cat:last-child{background:#2449c9}
+.cat small{font-size:10px;text-transform:uppercase;letter-spacing:.06em;opacity:.7}
+.cat b{font-size:18px;margin-top:2px}
+.cat span{font-size:11px;opacity:.8}
+.step em{font-style:normal;font-size:11px;font-weight:700;color:#c8201b}
+
+/* Check-in mais longo (rola dentro do celular de verdade) */
+#checkin .screen{height:auto}
+#checkin .body{overflow:visible}
+.tech{display:flex;flex-direction:column;gap:6px;margin-top:6px}
+.tr{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center;background:#fff;border:1px solid #ebe7e6;border-radius:14px;padding:8px 8px 8px 12px}
+.tr b{display:block;font-size:12.5px}
+.tr small{font-size:10.5px;color:#7b757d}
+.seg{display:grid;grid-template-columns:repeat(3,auto);background:#efecea;border-radius:10px;padding:2px;gap:2px}
+.seg span{font-size:10px;font-weight:700;padding:6px 6px;border-radius:8px;color:#6d6870;white-space:nowrap}
+.seg span.on{color:#fff}
+.seg span.bad{background:#c8201b}.seg span.mid{background:#d98a16}.seg span.good{background:#1f8a5b}
+
+/* Meu jogo */
+.tabs{grid-template-columns:none;grid-auto-flow:column;grid-auto-columns:1fr}
+.radar{padding:4px}
+.radar svg{display:block;width:100%;height:auto}
+.need{display:flex;flex-direction:column;gap:8px}
+.nr{display:grid;grid-template-columns:1fr 90px;gap:2px 10px;align-items:center;background:#fff;border:1px solid #ebe7e6;border-radius:14px;padding:9px 12px}
+.nr b{font-size:12.5px}
+.nr small{grid-column:1 / -1;font-size:11px;color:#7b757d}
+.bar{height:6px;border-radius:3px;background:#efecea;overflow:hidden}
+.bar i{display:block;height:100%;background:#c8201b;border-radius:3px}
+.need.good .bar i{background:#1f8a5b}
+</style>
+
+<div class="wrap">
+  <h1>Todas as telas do app</h1>
+  <p class="lead">Sete telas no estilo Kimono puro, na ordem em que vocês vão usar. Cada um entra com o próprio login. O Início e a Grade mostram o dia de hoje. Diário e Evolução usam dados de exemplo para você ver como ficam preenchidos.</p>
+  <nav class="jump" aria-label="Ir para a tela">
+    <a href="#login">Login</a><a href="#inicio">Início</a><a href="#checkin">Check-in</a><a href="#grade">Grade</a><a href="#diario">Diário</a><a href="#aula">Aula aberta</a><a href="#evolucao">Evolução</a><a href="#jogo">Meu jogo</a><a href="#perfil">Perfil</a>
+  </nav>
+
+  <div class="grid">
+
+    <!-- 1 LOGIN -->
+    <div class="opt" id="login">
+      <div class="phone"><div class="screen">
+        <div class="sb"><span>21:14</span><span></span></div>
+        <div class="login">
+          <div class="mark">LOGO<br>GB</div>
+          <h3>Diário de Tatame</h3>
+          <p>GB Sobradinho</p>
+          <div class="field"><label>E-mail</label><div>leandro@email.com</div></div>
+          <div class="field"><label>Senha</label><div class="ph">••••••••</div></div>
+          <span class="btn">Entrar</span>
+          <span class="forgot">Esqueci minha senha</span>
+          <div class="stripe"></div>
+        </div>
+      </div></div>
+      <div class="cap"><h2><b>1</b> Login</h2><p>E-mail e senha pelo Firebase. Só você e a Stephany têm conta, e não existe cadastro aberto.</p></div>
+    </div>
+
+    <!-- 2 INÍCIO -->
+    <div class="opt" id="inicio">
+      <div class="phone"><div class="screen">
+        <div class="sb"><span>21:14</span><span class="ex">hoje</span></div>
+        <div class="body">
+          <div class="hrow"><div class="logo">LOGO<br>GB</div>
+            <div class="who"><small>Boa noite,</small><b>Leandro</b></div>
+            <span class="foto">L<i>📷</i></span></div>
+          <div class="beltwrap"><div data-belt="0"></div><div class="lbl"><span>Faixa azul</span><span>0 de 4 graus</span></div></div>
+          <div class="prog">
+            <div class="ptop">
+              <div class="ring"><svg viewBox="0 0 120 120"><circle cx="60" cy="60" r="50" fill="none" stroke="rgba(255,255,255,.28)" stroke-width="14"/></svg><b>0<small>de 175</small></b></div>
+              <div><h3>Aulas realizadas</h3><div class="journey"><span class="mb az"></span><span class="jt"><span></span></span><span class="mb rx"></span></div></div>
+            </div>
+            <div class="stats"><div><b>0/2</b><small>Semana</small></div><div><b>0/8</b><small>Mês</small></div><div><b>0h</b><small>Tatame</small></div></div>
+          </div>
+          <div class="sec"><span>Grade de hoje · Qua 18/11</span><span style="color:#c8201b">Semana 12</span></div>
+          <div class="cls">
+            <div class="row past"><span class="t">07h30</span><span class="d">GB1 · Professor<small>Pegada de costas, 4 apoios</small></span><span class="go">Passou</span></div>
+            <div class="row next"><span class="t">19h30</span><span class="d">GB1 · Professor<small>Relógio e mata-leão</small></span><span class="go">Check-in</span></div>
+          </div>
+        </div>
+        <div class="nav" data-on="0"></div>
+      </div></div>
+      <div class="cap"><h2><b>2</b> Início</h2><p>Faixa, contagem e as aulas de hoje. Tocar em Check-in abre a tela 3.</p></div>
+    </div>
+
+    <!-- 3 CHECK-IN -->
+    <div class="opt" id="checkin">
+      <div class="phone"><div class="screen">
+        <div class="sb"><span>21:14</span><span class="ex">exemplo</span></div>
+        <div class="body" style="gap:12px">
+          <div class="ttl"><span class="back">←</span>Check-in</div>
+          <div class="plan">
+            <div class="k">Qua 18/11 · 19h30 · GB1 · Professor</div>
+            <h4>Semana 12: pegada de costas</h4>
+            <p>Dos quatro apoios · relógio · mata-leão</p>
+            <div class="yn"><span class="on">✓ Foi essa aula</span><span>Foi outra</span></div>
+          </div>
+          <div>
+            <div class="k">Como saiu cada técnica</div>
+            <div class="tech">
+              <div class="tr"><div><b>Pegada de costas</b><small>Costas</small></div><div class="seg"><span>Não saiu</span><span class="on mid">Às vezes</span><span>Saiu bem</span></div></div>
+              <div class="tr"><div><b>Relógio</b><small>Finalização</small></div><div class="seg"><span class="on bad">Não saiu</span><span>Às vezes</span><span>Saiu bem</span></div></div>
+              <div class="tr"><div><b>Mata-leão</b><small>Finalização</small></div><div class="seg"><span>Não saiu</span><span>Às vezes</span><span class="on good">Saiu bem</span></div></div>
+              <span class="chip add" style="align-self:flex-start">+ adicionar técnica</span>
+            </div>
+          </div>
+          <div>
+            <div class="k">Dificuldade</div>
+            <div class="diff"><span>1</span><span>2</span><span>3</span><span class="on">4</span><span>5</span></div>
+            <div class="diffl"><span>tranquila</span><span>muito difícil</span></div>
+          </div>
+          <div class="card">
+            <div class="k">O que aprendi</div>
+            <div class="txt">Prender o braço antes de passar o gancho. No relógio, o peso vai no ombro, não na mão.</div>
+          </div>
+          <div>
+            <div class="k">No rola, onde sofri?</div>
+            <div class="chips" style="margin-top:6px"><span class="chip">Guarda</span><span class="chip on">Passagem</span><span class="chip">Raspagem</span><span class="chip on">Defesa de costas</span><span class="chip">Quedas</span><span class="chip">4 apoios</span></div>
+          </div>
+          <div class="ph2"><div class="img" data-scene="1"></div><div><div class="k">Foto do dia</div><small>Toque para trocar</small></div></div>
+          <span class="btn" style="margin-top:auto">Salvar aula</span>
+        </div>
+      </div></div>
+      <div class="cap"><h2><b>3</b> Check-in</h2><p>O app sugere a aula prevista e você confirma ou troca. Para cada técnica, um toque diz como saiu. No rola, você marca onde sofreu. Isso alimenta a tela Meu jogo. Depois vêm dificuldade, anotação e foto.</p></div>
+    </div>
+
+    <!-- 4 GRADE -->
+    <div class="opt" id="grade">
+      <div class="phone"><div class="screen">
+        <div class="sb"><span>21:14</span><span class="ex">horários de exemplo</span></div>
+        <div class="body">
+          <div class="ttl">Grade</div>
+          <div class="days"><span>seg<b>16</b></span><span>ter<b>17</b></span><span class="on tod">qua<b>18</b></span><span>qui<b>19</b></span><span>sex<b>20</b></span><span>sáb<b>21</b></span></div>
+          <div class="card cyc">
+            <div class="k">Ciclo GB1 · semana 12 de 16</div>
+            <div class="cycbar"><i class="done"></i><i class="done"></i><i class="done"></i><i class="done"></i><i class="done"></i><i class="done"></i><i class="done"></i><i class="done"></i><i class="done"></i><i class="done"></i><i class="done"></i><i class="cur"></i><i></i><i></i><i></i><i></i></div>
+            <h4>Pegada de costas dos quatro apoios</h4>
+            <p>Estrangulamento relógio e mata-leão</p>
+            <span class="adj">Ajustar semana</span>
+          </div>
+          <div class="cls">
+            <div class="row past"><span class="t">07h30</span><span class="d">Prof. (nome)<small>Manhã</small></span><span class="tag gb1">GB1</span></div>
+            <div class="row"><span class="t">12h00</span><span class="d">Prof. (nome)<small>Almoço</small></span><span class="tag gb2">GB2</span></div>
+            <div class="row next"><span class="t">19h30</span><span class="d">Prof. (nome)<small>Noite</small></span><span class="tag gb1">GB1</span></div>
+            <div class="row"><span class="t">20h40</span><span class="d">Prof. (nome)<small>Noite</small></span><span class="tag gb2">GB2</span></div>
+          </div>
+          <div class="sec"><span>Próxima semana · 13</span><span>Guarda fechada e aranha</span></div>
+        </div>
+        <div class="nav" data-on="1"></div>
+      </div></div>
+      <div class="cap"><h2><b>4</b> Grade</h2><p>Turmas da academia por dia, com professor e programa. Em cima fica a semana do ciclo de 16 e o tema. "Ajustar semana" corrige se a academia pular ou repetir uma semana.</p></div>
+    </div>
+
+    <!-- 5 DIÁRIO -->
+    <div class="opt" id="diario">
+      <div class="phone"><div class="screen">
+        <div class="sb"><span>21:14</span><span class="ex">exemplo</span></div>
+        <div class="body" style="gap:10px">
+          <div class="ttl">Diário</div>
+          <div class="chips"><span class="chip on">Todas</span><span class="chip">Mais difíceis</span><span class="chip">Com foto</span><span class="chip">GB2</span></div>
+          <div class="review">
+            <div class="k" style="color:#c8201b">Para revisar</div>
+            <h4>3 técnicas com dificuldade 4 ou 5</h4>
+            <div class="chips"><span class="chip">Relógio</span><span class="chip">Raspagem da aranha</span><span class="chip">Kimura</span></div>
+          </div>
+          <div class="month">Dezembro 2026</div>
+          <div class="entry"><div class="img b" data-scene="2"></div><div><small>Ter 01/12 · GB1 · Semana 14</small><h5>Raspagem da guarda aranha</h5><div class="dots"><i class="f"></i><i class="f"></i><i class="f"></i><i class="f"></i><i class="f"></i></div></div></div>
+          <div class="entry"><div class="img none">＋</div><div><small>Qui 26/11 · GB1 · Semana 13</small><h5>Triângulo da guarda fechada</h5><div class="dots"><i class="f"></i><i class="f"></i><i></i><i></i><i></i></div></div></div>
+          <div class="month">Novembro 2026</div>
+          <div class="entry"><div class="img" data-scene="1"></div><div><small>Qua 18/11 · GB1 · Semana 12</small><h5>Pegada de costas · relógio</h5><div class="dots"><i class="f"></i><i class="f"></i><i class="f"></i><i class="f"></i><i></i></div></div></div>
+        </div>
+        <div class="nav" data-on="2"></div>
+      </div></div>
+      <div class="cap"><h2><b>5</b> Diário</h2><p>Todas as aulas com foto, tema e dificuldade. Os filtros mostram as aulas mais difíceis, e o quadro rosa junta o que você precisa revisar.</p></div>
+    </div>
+
+    <!-- 5b AULA -->
+    <div class="opt" id="aula">
+      <div class="phone"><div class="screen">
+        <div class="hero-ph" data-scene="1" data-overlay="1">
+          <div class="sb" style="color:#fff"><span>21:14</span><span class="ex">exemplo</span></div>
+          <div class="ph-top"><span class="back">←</span><span class="cnt">1 / 2</span></div>
+          <div class="ph-cap"><small>Qua 18/11/2026 · 19h30 · GB1</small><b>Semana 12 · Pegada de costas</b></div>
+          <div class="ph-dots"><i class="on"></i><i></i></div>
+        </div>
+        <div class="body" style="gap:12px;padding-top:14px">
+          <div class="chips"><span class="chip on">Pegada de costas</span><span class="chip on">Relógio</span><span class="chip">Mata-leão</span></div>
+          <div class="card" style="display:flex;justify-content:space-between;align-items:center">
+            <div><div class="k">Dificuldade</div><div class="dots" style="margin-top:6px"><i class="f"></i><i class="f"></i><i class="f"></i><i class="f"></i><i></i></div></div>
+            <div style="text-align:right"><div class="k">Aula nº</div><b style="font-size:18px">1</b></div>
+          </div>
+          <div class="card">
+            <div class="k">O que aprendi</div>
+            <div class="txt">Prender o braço antes de passar o gancho. No relógio, o peso vai no ombro, não na mão.</div>
+          </div>
+          <div class="card">
+            <div class="k" style="color:#c8201b">Revisar</div>
+            <div class="txt">Tempo do relógio quando ele gira para o lado.</div>
+          </div>
+          <span class="btn ghost" style="margin-top:auto">Editar aula</span>
+        </div>
+      </div></div>
+      <div class="cap"><h2><b>5b</b> Aula aberta</h2><p>Tocar numa aula do Diário abre esta tela. A foto ocupa o topo inteiro, e dá para ter mais de uma e arrastar para o lado. Tocar na foto abre em tela cheia, com zoom.</p></div>
+    </div>
+
+    <!-- 6 EVOLUÇÃO -->
+    <div class="opt" id="evolucao">
+      <div class="phone"><div class="screen">
+        <div class="sb"><span>21:14</span><span class="ex">exemplo · nov/2027</span></div>
+        <div class="body">
+          <div class="ttl">Evolução</div>
+          <div class="gauges">
+            <div class="gauge"><svg viewBox="0 0 120 70"><path d="M15 62 A45 45 0 0 1 105 62" fill="none" stroke="#eeeae9" stroke-width="12" stroke-linecap="round"/><path d="M15 62 A45 45 0 0 1 105 62" fill="none" stroke="#c8201b" stroke-width="12" stroke-linecap="round" stroke-dasharray="70.7 141.4"/></svg><b>50%</b><small>1 de 2<br>esta semana</small></div>
+            <div class="gauge"><svg viewBox="0 0 120 70"><path d="M15 62 A45 45 0 0 1 105 62" fill="none" stroke="#eeeae9" stroke-width="12" stroke-linecap="round"/><path d="M15 62 A45 45 0 0 1 105 62" fill="none" stroke="#c8201b" stroke-width="12" stroke-linecap="round" stroke-dasharray="123.7 141.4"/></svg><b>88%</b><small>7 de 8<br>este mês</small></div>
+          </div>
+          <div class="tabs"><span class="on">Histórico</span><span>Frequência</span><span>Meu jogo</span></div>
+          <div class="tl">
+            <div class="ev fut"><h4>3º grau <span>a critério do professor</span></h4><div data-belt="3" data-faded="1"></div></div>
+            <div class="ev"><h4>2º grau <span>12/10/2027</span></h4><div data-belt="2"></div><p>Aula 82</p></div>
+            <div class="ev"><h4>1º grau <span>20/04/2027</span></h4><div data-belt="1"></div><p>Aula 41</p></div>
+          </div>
+        </div>
+        <div class="nav" data-on="3"></div>
+      </div></div>
+      <div class="cap"><h2><b>6</b> Evolução</h2><p>Frequência da semana e do mês, e a linha do tempo dos graus com a faixa desenhada. A aba Frequência mostra o calendário com os dias treinados.</p></div>
+    </div>
+
+    <!-- 7 MEU JOGO -->
+    <div class="opt" id="jogo">
+      <div class="phone"><div class="screen">
+        <div class="sb"><span>21:14</span><span class="ex">exemplo · últimas 20 aulas</span></div>
+        <div class="body" style="gap:12px">
+          <div class="ttl">Meu jogo</div>
+          <div class="tabs"><span>Histórico</span><span>Frequência</span><span class="on">Meu jogo</span></div>
+          <div class="card radar"><svg id="radar" viewBox="-42 0 384 250" role="img" aria-label="Gráfico de aproveitamento por posição"></svg></div>
+          <div class="need">
+            <div class="k" style="color:#c8201b">Precisa melhorar</div>
+            <div class="nr"><b>Defesa de costas</b><span class="bar"><i style="width:28%"></i></span><small>Sofreu em 5 de 8 rolas</small></div>
+            <div class="nr"><b>Relógio</b><span class="bar"><i style="width:34%"></i></span><small>Não saiu em 3 de 4 aulas</small></div>
+          </div>
+          <div class="need good">
+            <div class="k" style="color:#1f8a5b">Indo bem</div>
+            <div class="nr"><b>Guarda fechada</b><span class="bar"><i style="width:82%"></i></span><small>Saiu bem em 5 de 6 aulas</small></div>
+          </div>
+        </div>
+        <div class="nav" data-on="3"></div>
+      </div></div>
+      <div class="cap"><h2><b>7</b> Meu jogo</h2><p>Aba dentro da Evolução. Junta o "como saiu" de cada técnica e o "onde sofri" do rola por posição. Mostra no gráfico onde você está forte e lista o que precisa treinar, com o motivo.</p></div>
+    </div>
+
+    <!-- 8 PERFIL -->
+    <div class="opt" id="perfil">
+      <div class="phone"><div class="screen">
+        <div class="sb"><span>21:14</span><span></span></div>
+        <div class="body" style="gap:12px">
+          <div class="pf"><span class="foto">L<i>📷</i></span><h3>Leandro</h3><small>GB Sobradinho</small></div>
+          <div class="beltwrap"><div data-belt="0"></div><div class="lbl"><span>Faixa azul desde nov/2026</span><span>0 de 4 graus</span></div></div>
+          <span class="btn dark">Registrar grau</span>
+          <div class="cats">
+            <div class="cat"><small>Categoria de idade</small><b>Master 1</b><span>34 anos · nasc. 1992</span></div>
+            <div class="cat"><small>Categoria de peso</small><b>Médio</b><span>78,4 kg · até 82,3</span></div>
+          </div>
+          <div class="card kv">
+            <div><span>Peso</span><span class="step"><b>78,4 kg</b><em>Atualizar</em></span></div>
+            <div><span>Meta por semana</span><span class="step"><i>−</i><b>2</b><i>+</i></span></div>
+            <div><span>Aulas até a roxa</span><b>175</b></div>
+            <div><span>Dados pessoais</span><b>›</b></div>
+          </div>
+          <span class="out">Sair</span>
+        </div>
+        <div class="nav" data-on="4"></div>
+      </div></div>
+      <div class="cap"><h2><b>8</b> Perfil</h2><p>A categoria de idade sai da data de nascimento e a de peso sai do último peso registrado, pela tabela da IBJJF com kimono. Ao atualizar o peso, a categoria muda sozinha. E-mail, telefone e sexo ficam em "Dados pessoais".</p></div>
+    </div>
+
+  </div>
+
+  <p class="note">Rascunho para aprovar as telas. Horários, professores, datas e anotações são de exemplo. Os círculos tracejados são o lugar da logo no app de vocês.</p>
+</div>
+
+<script>
+(function(){
+  function belt(g,faded){
+    var s='';
+    for(var i=0;i<g;i++){ s+='<rect x="'+(214+i*13)+'" y="4" width="7" height="36" fill="#ffffff"/>'; }
+    return '<svg class="belt" viewBox="0 0 300 44" role="img" aria-label="Faixa azul, '+g+' graus"'+(faded?' style="opacity:.45"':'')+'>'+
+      '<rect x="0" y="4" width="300" height="36" rx="4" fill="#2449c9"/>'+
+      '<rect x="0" y="9" width="300" height="1.2" fill="#ffffff" opacity=".22"/>'+
+      '<rect x="0" y="16" width="300" height="1.2" fill="#ffffff" opacity=".14"/>'+
+      '<rect x="0" y="28" width="300" height="1.2" fill="#ffffff" opacity=".14"/>'+
+      '<rect x="0" y="34.5" width="300" height="1.2" fill="#ffffff" opacity=".22"/>'+
+      '<rect x="206" y="4" width="64" height="36" fill="#111111"/>'+s+'</svg>';
+  }
+  /* "Fotos" de tatame desenhadas em canvas (o artifact não carrega imagens externas) */
+  function person(x,cx,base,s,gi,belt,pose){
+    x.save();x.translate(cx,base);x.scale(s,s);
+    x.fillStyle=gi;
+    if(pose==='kneel'){
+      x.beginPath();x.ellipse(0,-38,26,34,-.25,0,7);x.fill();
+      x.beginPath();x.ellipse(14,-8,34,12,0,0,7);x.fill();
+    }else if(pose==='lean'){
+      x.beginPath();x.ellipse(0,-30,38,22,.5,0,7);x.fill();
+      x.beginPath();x.ellipse(-30,-6,26,10,0,0,7);x.fill();
+    }else{
+      x.beginPath();x.ellipse(0,-30,18,26,0,0,7);x.fill();
+      x.beginPath();x.ellipse(0,-6,26,9,0,0,7);x.fill();
+    }
+    x.fillStyle=belt;x.fillRect(-20,pose==='lean'?-30:-34,40,5);
+    x.fillStyle='#7a5a48';
+    var hy=pose==='lean'?-46:(pose==='kneel'?-80:-62), hx=pose==='lean'?28:(pose==='kneel'?-8:0);
+    x.beginPath();x.arc(hx,hy,12,0,7);x.fill();
+    x.fillStyle='#1b1512';x.beginPath();x.arc(hx,hy-4,11,Math.PI,0);x.fill();
+    x.restore();
+  }
+  function scene(v){
+    var W=480,H=360,c=document.createElement('canvas');c.width=W;c.height=H;var x=c.getContext('2d');
+    var g=x.createLinearGradient(0,0,0,170);g.addColorStop(0,v==2?'#2b3140':'#3d3a3e');g.addColorStop(1,v==2?'#465068':'#5c575b');
+    x.fillStyle=g;x.fillRect(0,0,W,175);
+    x.fillStyle='#b81f1a';x.fillRect(0,128,W,18);
+    x.fillStyle='#f3efe9';x.fillRect(0,146,W,6);
+    x.fillStyle='rgba(255,236,205,.16)';x.fillRect(v==2?300:50,24,130,78);x.fillRect(v==2?120:260,24,70,78);
+    var f=x.createLinearGradient(0,175,0,H);f.addColorStop(0,'#2f55a8');f.addColorStop(1,'#1d3b80');
+    x.fillStyle=f;x.fillRect(0,175,W,H-175);
+    x.strokeStyle='rgba(0,0,0,.22)';x.lineWidth=2;
+    for(var i=0;i<=12;i++){var bx=i*40;x.beginPath();x.moveTo(W/2+(bx-W/2)*.55,175);x.lineTo(W/2+(bx-W/2)*1.9,H);x.stroke();}
+    [205,245,300].forEach(function(y){x.beginPath();x.moveTo(0,y);x.lineTo(W,y);x.stroke();});
+    x.fillStyle='#c8201b';x.fillRect(0,175,W,8);
+    try{x.filter='blur(1.2px)';}catch(e){}
+    if(v==2){
+      for(var p=0;p<6;p++){person(x,70+p*68,228+(p%2)*4,.62,p%3==1?'#2a2f3d':'#efece6',p<2?'#2449c9':(p==4?'#6b2fa8':'#f4f4f4'),'kneel');}
+    }else{
+      person(x,190,300,1.15,'#efece6','#2449c9','kneel');
+      person(x,290,292,1.05,'#23252c','#2449c9','lean');
+      person(x,410,236,.55,'#efece6','#f4f4f4','stand');
+    }
+    try{x.filter='none';}catch(e){}
+    var lg=x.createRadialGradient(W*.45,H*.35,40,W*.5,H*.5,W*.75);
+    lg.addColorStop(0,'rgba(255,230,200,.10)');lg.addColorStop(1,'rgba(0,0,0,.55)');
+    x.fillStyle=lg;x.fillRect(0,0,W,H);
+    var d=x.getImageData(0,0,W,H),a=d.data;
+    for(var k=0;k<a.length;k+=4){var n=(Math.random()-.5)*18;a[k]+=n;a[k+1]+=n;a[k+2]+=n;}
+    x.putImageData(d,0,0);
+    return c.toDataURL('image/jpeg',.82);
+  }
+  var cache={};
+  document.querySelectorAll('[data-scene]').forEach(function(el){
+    var v=el.getAttribute('data-scene');
+    if(!cache[v]){try{cache[v]=scene(+v);}catch(e){return;}}
+    var url='url('+cache[v]+')';
+    el.style.backgroundImage=el.hasAttribute('data-overlay')
+      ? 'linear-gradient(180deg,rgba(0,0,0,.35) 0%,transparent 30%,transparent 55%,rgba(0,0,0,.7) 100%),'+url
+      : url;
+    el.style.backgroundSize='cover';el.style.backgroundPosition='center';
+  });
+
+  /* Radar do Meu jogo (dados de exemplo, 0–100) */
+  (function(){
+    var svg=document.getElementById('radar'); if(!svg) return;
+    var L=[['Guarda',82],['Raspagem',55],['Passagem',40],['Costas',58],['Finalização',46],['Defesa de costas',28],['4 apoios',62],['Quedas',35]];
+    var cx=150,cy=128,R=88,n=L.length,h='';
+    function pt(i,r){var a=-Math.PI/2+i*2*Math.PI/n;return [cx+r*Math.cos(a),cy+r*Math.sin(a)];}
+    [.25,.5,.75,1].forEach(function(f){
+      h+='<polygon points="'+L.map(function(_,i){return pt(i,R*f).join(',');}).join(' ')+'" fill="none" stroke="#ebe7e6" stroke-width="1"/>';
+    });
+    L.forEach(function(_,i){var p=pt(i,R);h+='<line x1="'+cx+'" y1="'+cy+'" x2="'+p[0]+'" y2="'+p[1]+'" stroke="#ebe7e6"/>';});
+    h+='<polygon points="'+L.map(function(l,i){return pt(i,R*l[1]/100).join(',');}).join(' ')+'" fill="rgba(36,73,201,.18)" stroke="#2449c9" stroke-width="2" stroke-linejoin="round"/>';
+    L.forEach(function(l,i){
+      var p=pt(i,R*l[1]/100),low=l[1]<45;
+      h+='<circle cx="'+p[0]+'" cy="'+p[1]+'" r="3.5" fill="'+(low?'#c8201b':'#2449c9')+'"/>';
+      var q=pt(i,R+16),anc=Math.abs(q[0]-cx)<6?'middle':(q[0]>cx?'start':'end');
+      h+='<text x="'+q[0]+'" y="'+(q[1]+4)+'" text-anchor="'+anc+'" font-size="10.5" font-weight="'+(low?700:600)+'" fill="'+(low?'#c8201b':'#4b474e')+'" font-family="Sora,sans-serif">'+l[0]+'</text>';
+    });
+    svg.innerHTML=h;
+  })();
+
+  document.querySelectorAll('[data-belt]').forEach(function(el){
+    el.innerHTML=belt(+el.getAttribute('data-belt'),el.hasAttribute('data-faded'));
+  });
+  var items=[
+    ['Início','<path d="M3 11l9-7 9 7"/><path d="M5 10v10h14V10"/><path d="M10 20v-5h4v5"/>'],
+    ['Grade','<rect x="3" y="5" width="18" height="16" rx="3"/><path d="M3 10h18M8 3v4M16 3v4"/><path d="M7.5 14h3M13.5 14h3M7.5 17.5h3"/>'],
+    ['Diário','<path d="M5 4h11a3 3 0 0 1 3 3v13H8a3 3 0 0 1-3-3z"/><path d="M5 17a3 3 0 0 1 3-3h11"/><path d="M9 8h6"/>'],
+    ['Evolução','<path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/>'],
+    ['Perfil','<circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"/>']
+  ];
+  document.querySelectorAll('.nav').forEach(function(n){
+    var on=+n.getAttribute('data-on');
+    n.innerHTML=items.map(function(it,i){
+      return '<a href="#" class="'+(i===on?'on':'')+'" onclick="return false"><svg viewBox="0 0 24 24">'+it[1]+'</svg>'+it[0]+'</a>';
+    }).join('');
+  });
+})();
+</script>
+<style>
+.logo.gb,.mark.gb{border:0;opacity:1;border-radius:50%;background:url(assets/logo-gb.png) center/contain no-repeat;font-size:0}
+.logo.gb{background-image:url(assets/logo-gb-mark.png)}
+.page-gb img.l{border-radius:50%;object-fit:cover;transform:scale(1.12)}
+.login .mark.gb{width:130px;height:130px}
+.wm{display:block;height:30px;width:auto;margin-left:auto}
+.ttl{width:100%}
+.login .wm-big{display:block;height:34px;width:auto;margin:2px auto 0}
+.hrow .wm-side{display:block;height:18px;width:auto;margin-top:6px}
+.pf .wm{margin:0}
+.page-gb{display:flex;align-items:center;gap:8px;padding:2px 0 0}
+.page-gb img.l{width:30px;height:30px}
+.page-gb img.w{height:30px;width:auto}
+</style>
+<script>
+(function(){
+  // Logo nas telas de Login e Início
+  document.querySelectorAll('.logo,.login .mark').forEach(function(el){el.classList.add('gb');el.setAttribute('aria-label','Logo Gracie Barra');});
+  // Login: escrita grande abaixo da logo, no lugar do título provisório
+  var lg=document.querySelector('.login h3');
+  if(lg){lg.remove();}
+  // Início: escrita ao lado da logo, acima da saudação
+  var who=document.querySelector('#inicio .who');
+  // Demais telas: escrita à direita do título
+  document.querySelectorAll('.ttl').forEach(function(t){
+    var w=document.createElement('img');w.src='assets/gracie-barra.png';w.alt='Gracie Barra';w.className='wm';t.appendChild(w);
+  });
+  // Perfil: logo + escrita no topo
+  var pf=document.querySelector('#perfil .pf');
+  if(pf){var b=document.createElement('div');b.className='page-gb';
+    b.innerHTML='<img class="w" src="assets/gracie-barra.png" alt="Gracie Barra">';
+    pf.prepend(b);}
+  // Aula aberta: escrita pequena na barra de cima da foto
+  var pt=document.querySelector('#aula .ph-top .cnt');
+  if(pt){var w2=document.createElement('img');w2.src='assets/gracie-barra.png';w2.alt='Gracie Barra';
+    w2.style.cssText='height:14px;width:auto;filter:brightness(0) invert(1);margin-left:auto;margin-right:8px';pt.before(w2);}
+})();
+</script>
+
+</body></html>

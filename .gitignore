@@ -1,0 +1,6 @@
+node_modules/
+.vercel/
+.superpowers/
+tools/carga/curriculo.json
+tools/carga/service-account.json
+*.log
