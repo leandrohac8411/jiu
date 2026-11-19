@@ -2,7 +2,11 @@ import { entrar, redefinirSenha } from "../firebase.js";
 import { toast } from "../ui/util.js";
 import { cantoSup, cantoInf } from "../ui/arteLogin.js";
 
+// iPhone/iPad: o botão vira "Entrar com Face ID" (a senha salva nas Chaves do iCloud é liberada pelo Face ID).
+const ehIOS = /iPhone|iPad|iPod/.test(navigator.userAgent) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+
 const ic = {
+  faceid: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 8V5a2 2 0 0 1 2-2h3M16 3h3a2 2 0 0 1 2 2v3M21 16v3a2 2 0 0 1-2 2h-3M8 21H5a2 2 0 0 1-2-2v-3"/><path d="M8.5 9v1.5M15.5 9v1.5M12 9v4.5h-1M9 16.5c1.8 1.4 4.2 1.4 6 0"/></svg>',
   email: '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3.5 6l8.5 7 8.5-7"/></svg>',
   senha: '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="10" width="14" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3M12 14v3"/></svg>',
   olho: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>',
@@ -36,7 +40,7 @@ export default {
           <button class="btn entrar" type="submit" id="entrar">${ic.entrar}<span>ENTRAR</span></button>
         </form>
         <div class="lg-ou"><span>OU</span></div>
-        <button class="lg-bio" id="bio" type="button">${ic.digital}<span>Acesso com biometria</span></button>
+        <button class="lg-bio" id="bio" type="button">${ehIOS ? ic.faceid : ic.digital}<span>${ehIOS ? "Entrar com Face ID" : "Acesso com biometria"}</span></button>
       </div>
       <div class="lg-arte">
         <img class="no" src="img/faixa-kimono.jpg" alt="Faixa azul amarrada sobre o kimono da Gracie Barra" decoding="async">
@@ -63,7 +67,9 @@ export default {
         } catch { /* cai no plano B */ }
       }
       $("email").focus();
-      toast("Toque no campo de e-mail e escolha a senha salva — o celular pede Face ID ou digital.");
+      toast(ehIOS
+        ? "Escolha a senha salva em “Senhas”, acima do teclado. O iPhone confirma com o Face ID."
+        : "Escolha a senha salva acima do teclado. O celular confirma com a digital.");
     };
     $("f").addEventListener("submit", async e => {
       e.preventDefault();
