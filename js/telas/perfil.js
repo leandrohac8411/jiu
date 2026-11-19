@@ -43,7 +43,7 @@ export default {
         <button id="dados"><span>Dados pessoais</span><b>›</b></button>
         <button id="curriculo"><span>Importar currículo</span><b>›</b></button>
       </div>
-      <button class="out" id="sair">Sair</button>`;
+      <button class="btn sair" id="sair"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 4H6a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h4"/><path d="M21 12H10M17 8l4 4-4 4"/></svg><span>Sair da conta</span></button>`;
 
     pintarFoto(e.uid, p.fotoPerfilId, el.querySelector(".foto"));
     const $ = id => el.querySelector("#" + id);

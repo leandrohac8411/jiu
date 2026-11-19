@@ -272,6 +272,9 @@ textarea.input{min-height:72px;resize:vertical}
 .step{display:flex;align-items:center;gap:10px}
 .step button{width:30px;height:30px;border-radius:50%;background:var(--soft);display:grid;place-items:center;font-weight:800}
 .out{text-align:center;font-weight:700;color:var(--red);font-size:13.5px;padding:8px}
+.btn.sair{display:flex;align-items:center;justify-content:center;gap:10px;background:#fff;color:var(--red);border:1.5px solid var(--red);margin-top:4px}
+.btn.sair svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.btn.sair:active{background:var(--red-soft)}
 
 /* Folha (modal de baixo) */
 .folha-fundo{position:fixed;inset:0;z-index:40;background:rgba(10,10,12,.45);display:flex;align-items:flex-end;justify-content:center}
