@@ -25,7 +25,7 @@ export default {
         <header class="lp-marca">
           <div class="lp-linha-marca">
             <div class="lp-gb">
-              <img class="lp-logo" src="img/logo-gracie-referencia.png" alt="Gracie Barra">
+              <img class="lp-logo" src="img/logo-gb.png" alt="Gracie Barra">
               <div class="lp-gb-texto"><strong>GRACIE BARRA</strong><span>GB SOBRADINHO</span></div>
             </div>
             <span class="lp-separador" aria-hidden="true"></span>
