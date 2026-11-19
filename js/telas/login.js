@@ -1,6 +1,5 @@
 import { entrar, redefinirSenha } from "../firebase.js";
 import { toast } from "../ui/util.js";
-import { cantoSup, cantoInf } from "../ui/arteLogin.js";
 
 // iPhone/iPad: o botão vira "Entrar com Face ID" (a senha salva nas Chaves do iCloud é liberada pelo Face ID).
 const ehIOS = /iPhone|iPad|iPod/.test(navigator.userAgent) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
@@ -21,7 +20,6 @@ export default {
   classe: "sem-menu login",
   montar(el) {
     el.innerHTML = `
-      ${cantoSup}${cantoInf}
       <div class="login-corpo">
         <div class="lg-topo">
           <div class="logo" role="img" aria-label="Gracie Barra"></div>
@@ -42,13 +40,7 @@ export default {
         <div class="lg-ou"><span>OU</span></div>
         <button class="lg-bio" id="bio" type="button">${ehIOS ? ic.faceid : ic.digital}<span>${ehIOS ? "Entrar com Face ID" : "Acesso com biometria"}</span></button>
       </div>
-      <div class="lg-arte">
-        <img class="no" src="img/faixa-kimono.jpg" alt="Faixa azul amarrada sobre o kimono da Gracie Barra" decoding="async">
-        <div class="faixas" role="img" aria-label="Faixas: branca, azul, roxa, marrom e preta">
-          <i class="b"></i><i class="az"></i><i class="rx"></i><i class="mr"></i><i class="pt"></i>
-        </div>
-        <div class="lg-lema">DISCIPLINA<i></i>CONSTÂNCIA<i></i>EVOLUÇÃO</div>
-      </div>`;
+      <div class="lg-arte" role="img" aria-label="Faixa azul amarrada sobre o kimono da Gracie Barra; faixas branca, azul, roxa, marrom e preta; disciplina, constância, evolução"></div>`;
     const $ = id => el.querySelector("#" + id);
     const btnTexto = t => { $("entrar").querySelector("span").textContent = t; };
     $("olho").onclick = () => {
