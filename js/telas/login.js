@@ -10,7 +10,7 @@ export default {
       <div class="login-topo">
         <div class="marca" role="img" aria-label="Gracie Barra"></div>
         <h1>Diário de Tatame</h1>
-        <p>GB Sobradinho · cada treino registrado, da azul até a roxa</p>
+        <p>GB Sobradinho</p>
       </div>
       <div class="login-card">
       <form id="f" class="field" style="gap:12px" novalidate>
@@ -27,7 +27,6 @@ export default {
         <div class="faixas" role="img" aria-label="Faixas: branca, azul, roxa, marrom e preta">
           <i class="b"></i><i class="az"></i><i class="rx"></i><i class="mr"></i><i class="pt"></i>
         </div>
-        <small>Uso pessoal · Leandro e Stephany</small>
       </div>`;
     const $ = id => el.querySelector("#" + id);
     $("f").addEventListener("submit", async e => {
