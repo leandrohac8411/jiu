@@ -29,7 +29,7 @@ export default {
               <div class="lp-gb-texto"><strong>GRACIE BARRA</strong><span>GB SOBRADINHO</span></div>
             </div>
             <span class="lp-separador" aria-hidden="true"></span>
-            <h1 class="lp-app">Diário de Tatame</h1>
+            <h1 class="lp-app">Diário de<br>Tatame</h1>
           </div>
           <div class="lp-regua" aria-hidden="true"></div>
           <p class="lp-frase">Acesse sua jornada no <em>tatame</em></p>
