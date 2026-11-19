@@ -1,6 +1,6 @@
 import { entrar, redefinirSenha } from "../firebase.js";
 import { toast } from "../ui/util.js";
-import { cantoSup, cantoInf, noFaixa } from "../ui/arteLogin.js";
+import { cantoSup, cantoInf } from "../ui/arteLogin.js";
 
 const ic = {
   email: '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3.5 6l8.5 7 8.5-7"/></svg>',
@@ -36,7 +36,7 @@ export default {
         </form>
       </div>
       <div class="lg-arte">
-        ${noFaixa}
+        <img class="no" src="img/faixa-kimono.jpg" alt="Faixa azul amarrada sobre o kimono da Gracie Barra" decoding="async">
         <div class="faixas" role="img" aria-label="Faixas: branca, azul, roxa, marrom e preta">
           <i class="b"></i><i class="az"></i><i class="rx"></i><i class="mr"></i><i class="pt"></i>
         </div>
