@@ -113,8 +113,8 @@ textarea.input{min-height:72px;resize:vertical}
 #tela.login{padding:0;position:relative;overflow:hidden;background:#fff}
 .login{flex:1;display:flex;flex-direction:column;min-height:100vh;min-height:100dvh}
 .login .canto{position:absolute;pointer-events:none;z-index:0}
-.login .canto.sup{top:0;left:0;width:150px;height:170px}
-.login .canto.inf{right:0;bottom:0;width:120px;height:106px}
+.login .canto.sup{top:0;left:0;width:24vw;max-width:120px;height:200px}
+.login .canto.inf{right:0;bottom:0;width:46vw;max-width:220px;height:78px;z-index:0}
 .login-corpo{position:relative;z-index:1;display:flex;flex-direction:column;gap:16px;
   padding:calc(46px + env(safe-area-inset-top,0px)) max(26px,env(safe-area-inset-left,0px)) 0 max(26px,env(safe-area-inset-right,0px))}
 .lg-topo{display:flex;align-items:center;justify-content:center;gap:10px;white-space:nowrap}
@@ -125,22 +125,22 @@ textarea.input{min-height:72px;resize:vertical}
 .lg-div{width:1px;align-self:stretch;background:#d9d4d3}
 .lg-titulo{font-size:15px;font-weight:800;letter-spacing:-.01em}
 .lg-linha{height:1.5px;background:linear-gradient(90deg,transparent,var(--red) 20%,var(--red) 80%,transparent);opacity:.8}
-.lg-h{margin:4px 0 2px;text-align:center;font-size:20px;font-weight:600;color:#2b2a2e}
+.lg-h{margin:6px 0 4px;text-align:center;font-size:21px;font-weight:600;color:#2b2a2e}
 .lg-h em{font-style:italic;font-weight:800;color:var(--red);position:relative;white-space:nowrap}
 .lg-h em::after{content:"";position:absolute;left:4%;right:-6%;bottom:-6px;height:6px;
   background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 8' preserveAspectRatio='none'%3E%3Cpath d='M2 6 Q40 1 98 4' stroke='%23c8201b' stroke-width='2.6' fill='none' stroke-linecap='round'/%3E%3C/svg%3E") center/100% 100% no-repeat}
 .campo{position:relative}
 .campo svg{position:absolute;left:16px;top:50%;transform:translateY(-50%);width:22px;height:22px;stroke:#3d3a40;fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;pointer-events:none}
-.campo .input{padding:15px 48px 15px 50px;border-radius:16px;box-shadow:0 6px 16px -12px rgba(0,0,0,.35)}
+.campo .input{padding:17px 48px 17px 52px;font-size:16px;border-radius:16px;box-shadow:0 6px 16px -12px rgba(0,0,0,.35)}
 .campo .olho{position:absolute;right:10px;top:50%;transform:translateY(-50%);width:36px;height:36px;display:grid;place-items:center}
 .campo .olho svg{position:static;transform:none}
 .lg-esqueci{align-self:flex-end;color:var(--red);font-weight:700;font-size:13px;text-decoration:underline;text-underline-offset:4px}
 .btn.entrar{display:flex;align-items:center;justify-content:center;gap:12px;font-size:17px;letter-spacing:.06em;border-radius:99px;padding:15px;
   background:linear-gradient(180deg,#d9271f,#b51a15);box-shadow:0 12px 24px -12px rgba(200,32,27,.7)}
 .btn.entrar svg{width:22px;height:22px;stroke:#fff;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
-.lg-arte{position:relative;z-index:1;margin-top:auto;overflow:hidden;display:flex;flex-direction:column;align-items:center;gap:12px;
+.lg-arte{position:relative;z-index:1;margin-top:-26px;overflow:hidden;display:flex;flex-direction:column;align-items:center;gap:12px;
   padding-bottom:calc(22px + env(safe-area-inset-bottom,0px))}
-.lg-arte .no{display:block;width:100%;height:200px;object-fit:cover;object-position:86% 30%;margin-bottom:-14px;
+.lg-arte .no{display:block;width:100%;height:clamp(190px,29vh,260px);object-fit:cover;object-position:84% 20%;margin-bottom:-22px;
   -webkit-mask-image:linear-gradient(180deg,transparent 0,#000 14%,#000 70%,transparent 100%);mask-image:linear-gradient(180deg,transparent 0,#000 14%,#000 70%,transparent 100%)}
 .faixas{display:grid;grid-template-columns:repeat(5,1fr);gap:7px;width:min(320px,82%)}
 .faixas i{height:11px;border-radius:99px;position:relative;overflow:hidden}
@@ -151,7 +151,7 @@ textarea.input{min-height:72px;resize:vertical}
 .faixas .mr{background:#6b4226}
 .faixas .pt{background:#151517}
 .faixas .pt::after{background:var(--red)}
-.lg-lema{position:relative;z-index:2;font-size:10px;font-weight:600;letter-spacing:.16em;color:#4b474e;display:flex;gap:10px;align-items:center}
+.lg-lema{position:relative;z-index:3;font-size:10px;font-weight:600;letter-spacing:.16em;color:#4b474e;display:flex;gap:10px;align-items:center}
 .lg-lema i{width:5px;height:5px;border-radius:50%;background:var(--red)}
 @media (max-height:720px){ .lg-arte .no{height:170px} .login-corpo{gap:11px} }
 
@@ -291,3 +291,9 @@ textarea.input{min-height:72px;resize:vertical}
   .folha{animation:sobe .18s ease-out}
   @keyframes sobe{from{transform:translateY(24px);opacity:.6}to{transform:none;opacity:1}}
 }
+
+.lg-ou{display:flex;align-items:center;gap:14px;color:#4b474e;font-weight:700;font-size:13px}
+.lg-ou::before,.lg-ou::after{content:"";flex:1;height:1px;background:#bdb7b6}
+.lg-bio{position:relative;z-index:2;display:flex;align-items:center;justify-content:center;gap:14px;width:88%;align-self:center;
+  padding:13px;border:1.5px solid var(--red);border-radius:99px;background:#fff;font-size:15px;font-weight:600}
+.lg-bio svg{width:28px;height:28px;stroke:var(--red);fill:none;stroke-width:1.6;stroke-linecap:round}

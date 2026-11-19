@@ -7,6 +7,7 @@ const ic = {
   senha: '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="10" width="14" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3M12 14v3"/></svg>',
   olho: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>',
   olhoFechado: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/><path d="M4 20L20 4"/></svg>',
+  digital: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7.5 4.8A8 8 0 0 1 20 11.5v1.5"/><path d="M4 9.5A8 8 0 0 1 5.6 6.4"/><path d="M4 13v-1.5"/><path d="M8 20.5c-1-1.6-1.5-3.4-1.5-5.5v-3.5a5.5 5.5 0 0 1 11 0V13"/><path d="M12 11.5V15c0 2.4.7 4.4 2 6"/><path d="M9.3 11.5a2.7 2.7 0 0 1 5.4 0V15c0 1.4.3 2.7.9 3.8"/><path d="M17.5 16.5c.1 1.3.4 2.4.9 3.4"/></svg>',
   entrar: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 4h4a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2h-4"/><path d="M3 12h11M10 8l4 4-4 4"/></svg>'
 };
 
@@ -34,6 +35,8 @@ export default {
           <p id="erro" class="aviso" hidden></p>
           <button class="btn entrar" type="submit" id="entrar">${ic.entrar}<span>ENTRAR</span></button>
         </form>
+        <div class="lg-ou"><span>OU</span></div>
+        <button class="lg-bio" id="bio" type="button">${ic.digital}<span>Acesso com biometria</span></button>
       </div>
       <div class="lg-arte">
         <img class="no" src="img/faixa-kimono.jpg" alt="Faixa azul amarrada sobre o kimono da Gracie Barra" decoding="async">
@@ -50,12 +53,27 @@ export default {
       $("olho").innerHTML = ver ? ic.olhoFechado : ic.olho;
       $("olho").setAttribute("aria-label", ver ? "Esconder senha" : "Mostrar senha");
     };
+    // "Biometria": usa a senha salva no celular (Chaves do iCloud / Gerenciador do Google),
+    // que o próprio aparelho libera com Face ID ou digital.
+    $("bio").onclick = async () => {
+      if ("PasswordCredential" in window) {
+        try {
+          const c = await navigator.credentials.get({ password: true, mediation: "optional" });
+          if (c?.password) { $("email").value = c.id; $("senha").value = c.password; $("f").requestSubmit(); return; }
+        } catch { /* cai no plano B */ }
+      }
+      $("email").focus();
+      toast("Toque no campo de e-mail e escolha a senha salva — o celular pede Face ID ou digital.");
+    };
     $("f").addEventListener("submit", async e => {
       e.preventDefault();
       $("erro").hidden = true;
       $("entrar").disabled = true; btnTexto("ENTRANDO…");
       try {
         await entrar($("email").value, $("senha").value);
+        if ("PasswordCredential" in window) {
+          try { await navigator.credentials.store(new PasswordCredential({ id: $("email").value.trim(), password: $("senha").value })); } catch { /* opcional */ }
+        }
       } catch {
         $("erro").textContent = "E-mail ou senha incorretos.";
         $("erro").hidden = false;
