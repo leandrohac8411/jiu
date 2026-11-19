@@ -1,5 +1,6 @@
 // Check-in de uma aula: #checkin/<turmaId>/<data>, #checkin/novo/<data> ou #checkin/editar/<aulaId>
-import { hojeISO } from "../logica/datas.js";
+import { hojeISO, dataValida } from "../logica/datas.js";
+import { mesclarTecnicas } from "../logica/tecnicas.js";
 import { aulaPrevista, sugerirFixarAula, CICLO_SEMANAS } from "../logica/ciclo.js";
 import { CATEGORIAS } from "../logica/meujogo.js";
 import { salvarAula, salvarFoto, excluirFoto, salvarCurriculo, salvarTurma } from "../dados.js";
@@ -19,7 +20,9 @@ export default {
     if (modo === "editar" && !editando) { el.innerHTML = '<p class="vazio">Aula não encontrada.</p>'; return; }
     const turma = editando ? e.grade.find(t => t.id === editando.turmaId) || null
       : modo === "novo" ? null : e.grade.find(t => t.id === modo) || null;
-    const data = editando ? editando.data : (arg || hojeISO());
+    const hoje = hojeISO();
+    let data = editando ? editando.data : (dataValida(arg) && arg <= hoje ? arg : hoje);
+    const programaFixo = !editando && modo !== "novo" && (turma?.programa === "GB1" || turma?.programa === "GB2");
 
     // ---------- estado do formulário ----------
     const f = editando ? {
@@ -27,7 +30,7 @@ export default {
       horario: editando.horario, professor: editando.professor || "",
       prevista: editando.prevista, sel: { ...editando.realizada },
       temaLivre: editando.realizada?.temaLivre || "",
-      tecnicas: (editando.tecnicas || []).map(t => ({ ...t })),
+      tecnicas: mesclarTecnicas(conteudoPrevisto(e.curriculo, editando.realizada)?.tecnicas || [], editando.tecnicas || []),
       dificuldade: editando.dificuldade, aprendi: editando.aprendi || "", revisar: editando.revisar || "",
       rolaSofri: [...(editando.rolaSofri || [])], duracaoMin: editando.duracaoMin || 60,
       fotoId: editando.fotoId || null, fotoNova: null
@@ -46,8 +49,8 @@ export default {
     };
     const carregarTecnicasDoCurriculo = () => {
       const c = conteudoPrevisto(e.curriculo, f.sel);
-      const extras = f.tecnicas.filter(t => t.extra);
-      f.tecnicas = [...(c?.tecnicas || []).map(t => ({ nome: t.nome, categoria: t.categoria, resultado: null })), ...extras];
+      // mantém as notas já dadas e as técnicas adicionadas à mão
+      f.tecnicas = mesclarTecnicas(c?.tecnicas || [], f.tecnicas.filter(t => t.extra || t.resultado));
     };
     if (!editando && f.programa !== "a definir") recalcularPrevista();
 
@@ -64,8 +67,8 @@ export default {
       el.innerHTML = `
         <div class="ttl"><a class="back" href="#inicio" aria-label="Voltar">←</a>${editando ? "Editar aula" : "Check-in"}${wm}</div>
         <div class="plan">
-          <div class="k">${dataCurta(data)} · ${modo === "novo" ? `<input id="hora" type="time" value="${f.horario}" style="background:transparent;border:0;color:#fff;font:inherit;width:72px">` : horaTexto(f.horario)}${f.professor ? " · " + esc(f.professor) : ""}</div>
-          ${!definido || modo === "novo" ? `
+          <div class="k">${modo === "novo" || editando ? `<input id="data" type="date" value="${data}" max="${hoje}" aria-label="Data da aula" style="background:transparent;border:0;color:#fff;font:inherit;width:128px;color-scheme:dark"> · ` : dataCurta(data) + " · "}${modo === "novo" ? `<input id="hora" type="time" value="${esc(f.horario)}" aria-label="Horário" style="background:transparent;border:0;color:#fff;font:inherit;width:72px;color-scheme:dark">` : horaTexto(esc(f.horario))}${f.professor ? " · " + esc(f.professor) : ""}</div>
+          ${!programaFixo ? `
             <p style="margin:8px 0 4px">Qual programa?</p>
             <div class="yn"><button data-prog="GB1" class="${f.programa === "GB1" ? "on" : ""}">GB1</button><button data-prog="GB2" class="${f.programa === "GB2" ? "on" : ""}">GB2</button></div>` : ""}
           ${definido ? `
@@ -117,10 +120,16 @@ export default {
       f.revisar = el.querySelector("#revisar")?.value ?? f.revisar;
       f.duracaoMin = Number(el.querySelector("#dur")?.value) || f.duracaoMin;
       const h = el.querySelector("#hora"); if (h) f.horario = h.value || f.horario;
+      const d = el.querySelector("#data");
+      if (d && dataValida(d.value) && d.value <= hoje && d.value !== data) {
+        data = d.value;
+        if (!editando && (f.programa === "GB1" || f.programa === "GB2")) recalcularPrevista();
+      }
     };
     const redesenhar = () => { guardarTextos(); desenhar(); };
 
     function ligar() {
+      const campoData = el.querySelector("#data"); if (campoData) campoData.onchange = () => redesenhar();
       el.querySelectorAll("[data-prog]").forEach(b => b.onclick = () => { f.programa = b.dataset.prog; recalcularPrevista(); redesenhar(); });
       el.querySelectorAll("[data-ab]").forEach(b => b.onclick = () => { f.sel.aula = b.dataset.ab; carregarTecnicasDoCurriculo(); redesenhar(); });
       const essa = el.querySelector("#essa");
@@ -143,7 +152,10 @@ export default {
         const file = ev.target.files?.[0];
         if (!file) return;
         guardarTextos();
-        try { f.fotoNova = await comprimirImagem(file, 1000, 250_000); }
+        try {
+          f.fotoNova = await comprimirImagem(file, 1000, 250_000);
+          f.fotoNova.mini = (await comprimirImagem(file, 160, 12_000)).dados; // miniatura do Diário
+        }
         catch { toast("Não consegui abrir esta foto. Tente outra."); }
         desenhar();
       };
@@ -208,24 +220,26 @@ export default {
       const btn = el.querySelector("#salvar");
       btn.disabled = true; btn.textContent = "Salvando…";
       try {
-        let fotoId = f.fotoId;
+        let fotoId = f.fotoId, fotoMini = editando?.fotoMini ?? null;
         if (f.fotoNova) {
-          fotoId = await salvarFoto(e.uid, { aulaId: editando?.id || null, ...f.fotoNova });
-          if (f.fotoId) excluirFoto(e.uid, f.fotoId).catch(() => {});
+          fotoId = await salvarFoto(e.uid, { aulaId: editando?.id || null, dados: f.fotoNova.dados, largura: f.fotoNova.largura, altura: f.fotoNova.altura });
+          fotoMini = f.fotoNova.mini || null;
         }
         const prevista = f.prevista || { programa: f.programa, semana: f.sel?.semana ?? null, aula: f.sel?.aula ?? null };
         const realizada = { programa: f.programa, semana: f.sel?.semana ?? null, aula: f.temaLivre ? null : f.sel?.aula ?? null, ...(f.temaLivre ? { temaLivre: f.temaLivre } : {}) };
         const aula = {
-          ...(editando ? { id: editando.id, criadoEm: editando.criadoEm ?? null } : {}),
+          ...(editando ? { id: editando.id, ...(editando.criadoEm ? { criadoEm: editando.criadoEm } : {}) } : {}),
           data, horario: f.horario, professor: f.professor, duracaoMin: f.duracaoMin,
           turmaId: turma?.id || null,
           prevista, foiPrevista: !f.temaLivre && realizada.semana === prevista.semana && realizada.aula === prevista.aula,
           realizada,
           tecnicas: f.tecnicas.filter(t => t.resultado).map(({ nome, categoria, resultado }) => ({ nome, categoria, resultado })),
           dificuldade: f.dificuldade, aprendi: f.aprendi.trim(), revisar: f.revisar.trim(),
-          rolaSofri: f.rolaSofri, fotoId
+          rolaSofri: f.rolaSofri, fotoId, fotoMini
         };
         const id = await salvarAula(e.uid, aula);
+        // a foto antiga só sai depois que a aula já aponta para a nova
+        if (f.fotoNova && f.fotoId) excluirFoto(e.uid, f.fotoId).catch(() => {});
 
         // Currículo vazio (GB2 no começo): o que foi registrado vira o currículo daquela semana.
         const novas = f.tecnicas.filter(t => t.extra).map(({ nome, categoria }) => ({ nome, categoria }));
@@ -234,7 +248,7 @@ export default {
             `Assim, na próxima volta do ciclo ${f.programa}, essa aula já aparece preenchida.`, "Salvar no currículo");
           if (ok) {
             const tema = await pedirTema(novas);
-            await salvarCurriculo(f.programa, realizada.semana, realizada.aula, { tema, tecnicas: novas });
+            if (tema !== null) await salvarCurriculo(f.programa, realizada.semana, realizada.aula, { tema, tecnicas: novas });
           }
         }
         // Aprende a aula A/B da turma depois de duas correções iguais.
@@ -261,7 +275,7 @@ export default {
           <div class="field"><label for="tema">Como chamar esta aula?</label><input class="input" id="tema" value="${esc(tecnicas.map(t => t.nome).join(" e "))}"></div>
           <button class="btn" id="ok">Salvar</button>`;
         folha.querySelector("#ok").onclick = () => { const v = folha.querySelector("#tema").value.trim(); fechar(); resolve(v); };
-      }));
+      }, () => resolve(null)));
     }
 
     desenhar();

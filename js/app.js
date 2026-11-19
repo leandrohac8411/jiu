@@ -3,6 +3,7 @@ import { configurado, aoMudarUsuario, sair } from "./firebase.js";
 import { USERS } from "./firebase-config.js";
 import { menuInferior } from "./ui/icones.js";
 import { toast } from "./ui/util.js";
+import { hojeISO } from "./logica/datas.js";
 
 const $tela = document.getElementById("tela");
 const $menu = document.getElementById("menu");
@@ -36,6 +37,11 @@ export async function desenhar() {
   let { rota, params } = lerRota();
   if (!ctx.usuario) rota = "login";
   else if (rota === "login") rota = "inicio";
+  if (rota !== "login" && ctx.estado?.erro) {
+    $tela.className = "sem-menu"; $menu.hidden = true;
+    $tela.innerHTML = `<p class="aviso">${ctx.estado.erro}</p><button class="btn ghost" onclick="location.reload()">Tentar de novo</button>`;
+    return;
+  }
   if (rota !== "login" && !ctx.estado?.pronto) return; // espera os dados chegarem
 
   const tela = await carregarTela(rota);
@@ -58,6 +64,14 @@ export function dadosMudaram() {
 }
 
 window.addEventListener("hashchange", desenhar);
+
+// App instalado volta do segundo plano no dia seguinte: redesenha com a data nova.
+let diaDoDesenho = hojeISO();
+document.addEventListener("visibilitychange", () => {
+  if (document.visibilityState !== "visible") return;
+  const hoje = hojeISO();
+  if (hoje !== diaDoDesenho) { diaDoDesenho = hoje; if (telaAtual?.vivo) desenhar(); }
+});
 
 if (!configurado) {
   $tela.innerHTML = '<p class="aviso">Falta configurar o Firebase em js/firebase-config.js.</p>';

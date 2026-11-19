@@ -36,7 +36,7 @@ export default {
       else if (passou) { cls += " past"; acao = "Check-in"; }
       else if (!proxMarcada) { cls += " next"; proxMarcada = true; }
       return `<a class="${cls}" href="${destino}" style="text-decoration:none;color:inherit">
-        <span class="t">${horaTexto(t.horario)}</span>
+        <span class="t">${esc(horaTexto(t.horario))}</span>
         <span class="d">${prog}${prof}<small>${esc(sub)}</small></span>
         <span class="go">${acao}</span></a>`;
     }).join("");

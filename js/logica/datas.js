@@ -36,3 +36,9 @@ export function diasEntre(isoA, isoB) {
 export function diasNoMes(ano, mes) {
   return new Date(Date.UTC(ano, mes, 0)).getUTCDate();
 }
+
+export function dataValida(iso) {
+  if (typeof iso !== "string" || !/^\d{4}-\d{2}-\d{2}$/.test(iso)) return false;
+  const { ano, mes, dia } = deISO(iso);
+  return mes >= 1 && mes <= 12 && dia >= 1 && dia <= diasNoMes(ano, mes);
+}

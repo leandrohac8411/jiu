@@ -14,3 +14,6 @@ export const ANCORAS_INICIAIS = [
   { programa: "GB1", data: "2026-11-16", semana: 12 },
   { programa: "GB2", data: "2026-11-16", semana: 12 }
 ];
+
+// ID fixo: gravar a carga duas vezes não duplica a grade.
+export const idTurma = t => `${t.diaSemana}-${t.horario.replace(":", "")}`;

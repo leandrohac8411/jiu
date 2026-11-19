@@ -14,3 +14,9 @@ test("GB1 e GB2 começam na semana 12 em 16/11/2026", () => {
   assert.deepEqual(ANCORAS_INICIAIS.map(a => [a.programa, a.data, a.semana]),
     [["GB1", "2026-11-16", 12], ["GB2", "2026-11-16", 12]]);
 });
+
+import { idTurma } from "../js/carga.js";
+test("id da turma é fixo (dia + horário), para a carga não duplicar", () => {
+  assert.equal(idTurma({ diaSemana: 3, horario: "19:00" }), "3-1900");
+  assert.equal(new Set(GRADE_INICIAL.map(idTurma)).size, 15);
+});

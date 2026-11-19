@@ -45,8 +45,8 @@ export default {
       ${ciclos}
       <div class="cls">${turmas.map(t => `
         <button class="row" data-turma="${t.id}">
-          <span class="t">${horaTexto(t.horario)}</span>
-          <span class="d">${t.professor ? esc(t.professor) : "Professor a definir"}<small>${t.aula ? "Aula " + t.aula + " · " : ""}${t.duracaoMin || 60} min</small></span>
+          <span class="t">${esc(horaTexto(t.horario))}</span>
+          <span class="d">${t.professor ? esc(t.professor) : "Professor a definir"}<small>${t.aula ? "Aula " + esc(t.aula) + " · " : ""}${esc(t.duracaoMin || 60)} min</small></span>
           ${etiquetaPrograma(t.programa)}
         </button>`).join("") || '<p class="vazio">Sem turmas neste dia.</p>'}</div>
       <button class="chip add" id="nova" style="align-self:center">+ turma</button>`;
@@ -77,11 +77,11 @@ function editarTurma(t) {
     const opt = (v, atual, txt = v) => `<option value="${v}" ${String(atual) === String(v) ? "selected" : ""}>${txt}</option>`;
     folha.innerHTML = `<h3>${t.id ? "Editar turma" : "Nova turma"}</h3>
       <div class="field"><label for="dia">Dia</label><select class="input" id="dia">${[1, 2, 3, 4, 5, 6, 0].map(d => opt(d, t.diaSemana, ["Domingo", "Segunda", "Terça", "Quarta", "Quinta", "Sexta", "Sábado"][d])).join("")}</select></div>
-      <div class="field"><label for="hora">Horário</label><input class="input" id="hora" type="time" value="${t.horario}"></div>
+      <div class="field"><label for="hora">Horário</label><input class="input" id="hora" type="time" value="${esc(t.horario)}"></div>
       <div class="field"><label for="prog">Programa</label><select class="input" id="prog">${opt("a definir", t.programa)}${opt("GB1", t.programa)}${opt("GB2", t.programa)}</select></div>
       <div class="field"><label for="aula">Aula</label><select class="input" id="aula">${opt("", t.aula ?? "", "A definir (seg/ter = A, qua/qui = B)")}${opt("A", t.aula ?? "", "Sempre A")}${opt("B", t.aula ?? "", "Sempre B")}</select></div>
       <div class="field"><label for="prof">Professor</label><input class="input" id="prof" value="${esc(t.professor)}"></div>
-      <div class="field"><label for="dur">Duração (min)</label><input class="input" id="dur" type="number" min="10" max="240" step="5" value="${t.duracaoMin || 60}"></div>
+      <div class="field"><label for="dur">Duração (min)</label><input class="input" id="dur" type="number" min="10" max="240" step="5" value="${esc(t.duracaoMin || 60)}"></div>
       <div class="acoes"><button class="btn ghost" id="c">Cancelar</button><button class="btn" id="ok">Salvar</button></div>
       ${t.id ? '<button class="out" id="del">Excluir turma</button>' : ""}`;
     const v = id => folha.querySelector("#" + id).value;

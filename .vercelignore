@@ -1,0 +1,11 @@
+docs/
+mockup/
+tests/
+tools/
+dev/
+.superpowers/
+README.md
+package.json
+firebase.json
+.firebaserc
+firestore.rules

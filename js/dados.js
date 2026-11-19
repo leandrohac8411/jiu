@@ -1,7 +1,7 @@
 // Leitura e gravação no Firestore. Formato dos documentos: docs/superpowers/specs (seção 10).
 import {
   collection, doc, getDoc, getDocs, setDoc, addDoc, updateDoc, deleteDoc, onSnapshot,
-  query, orderBy, limit, serverTimestamp, writeBatch
+  query, orderBy, limit, serverTimestamp, writeBatch, runTransaction
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 import { db } from "./firebase.js";
 
@@ -14,17 +14,23 @@ export const PERFIL_PADRAO = nome => ({
   nascimento: null, sexo: null, telefone: "", fotoPerfilId: null
 });
 
-export function ouvirPerfil(uid, nome, cb) {
-  return onSnapshot(usuario(uid), snap => {
-    if (!snap.exists()) { setDoc(usuario(uid), PERFIL_PADRAO(nome)); return; }
-    cb({ ...PERFIL_PADRAO(nome), ...snap.data() });
-  });
+// Cria o perfil padrão só quando o SERVIDOR confirma que ele não existe
+// (uma leitura do cache vazio num celular novo não pode apagar o perfil real).
+export function ouvirPerfil(uid, nome, cb, erro) {
+  return onSnapshot(usuario(uid), { includeMetadataChanges: true }, snap => {
+    if (snap.exists()) { cb({ ...PERFIL_PADRAO(nome), ...snap.data() }); return; }
+    if (snap.metadata.fromCache) return;
+    runTransaction(db, async tx => {
+      const atual = await tx.get(usuario(uid));
+      if (!atual.exists()) tx.set(usuario(uid), PERFIL_PADRAO(nome));
+    }).catch(erro);
+  }, erro);
 }
 export const salvarPerfil = (uid, parcial) => setDoc(usuario(uid), parcial, { merge: true });
 
 /* ---------- Aulas ---------- */
-export function ouvirAulas(uid, cb) {
-  return onSnapshot(sub(uid, "aulas"), snap => cb(snap.docs.map(d => ({ id: d.id, ...d.data() }))));
+export function ouvirAulas(uid, cb, erro) {
+  return onSnapshot(sub(uid, "aulas"), snap => cb(snap.docs.map(d => ({ id: d.id, ...d.data() }))), erro);
 }
 export async function salvarAula(uid, aula) {
   const { id, ...dados } = aula;
@@ -63,8 +69,8 @@ export async function listarPesos(uid) {
 export const registrarPeso = (uid, { data, kg }) => addDoc(sub(uid, "pesos"), { data, kg });
 
 /* ---------- Grade (compartilhada) ---------- */
-export function ouvirGrade(cb) {
-  return onSnapshot(collection(db, "grade"), snap => cb(snap.docs.map(d => ({ id: d.id, ...d.data() }))));
+export function ouvirGrade(cb, erro) {
+  return onSnapshot(collection(db, "grade"), snap => cb(snap.docs.map(d => ({ id: d.id, ...d.data() }))), erro);
 }
 export async function salvarTurma(turma) {
   const { id, ...dados } = turma;
@@ -74,12 +80,12 @@ export async function salvarTurma(turma) {
 export const excluirTurma = id => deleteDoc(doc(db, "grade", id));
 
 /* ---------- Currículo (compartilhado) ---------- */
-export function ouvirCurriculo(cb) {
+export function ouvirCurriculo(cb, erro) {
   return onSnapshot(collection(db, "curriculo"), snap => {
     const mapa = {};
     snap.docs.forEach(d => { mapa[d.id] = d.data(); });
     cb(mapa);
-  });
+  }, erro);
 }
 export const chaveCurriculo = (programa, semana) => `${programa}-${semana}`;
 export function salvarCurriculo(programa, semana, aula, { tema, tecnicas }) {
@@ -97,8 +103,11 @@ export async function importarCurriculo(lista) {
 
 /* ---------- Ciclo (compartilhado) ---------- */
 const cfgCiclo = () => doc(db, "config", "ciclo");
-export function ouvirAncoras(cb) {
-  return onSnapshot(cfgCiclo(), snap => cb(snap.exists() ? (snap.data().ancoras || []) : null));
+export function ouvirAncoras(cb, erro) {
+  return onSnapshot(cfgCiclo(), { includeMetadataChanges: true }, snap => {
+    if (snap.exists()) cb(snap.data().ancoras || []);
+    else if (!snap.metadata.fromCache) cb(null); // null = o servidor confirmou que não existe
+  }, erro);
 }
 export async function adicionarAncora(ancora) {
   const snap = await getDoc(cfgCiclo());
@@ -107,14 +116,17 @@ export async function adicionarAncora(ancora) {
 }
 
 /* ---------- Carga inicial (grade real + âncoras), só se ainda não existir ---------- */
-export async function cargaInicial(grade, ancoras) {
-  const snap = await getDoc(cfgCiclo());
-  if (snap.exists()) return false;
-  const lote = writeBatch(db);
-  grade.forEach(t => lote.set(doc(collection(db, "grade")), t));
-  lote.set(cfgCiclo(), { ancoras });
-  await lote.commit();
-  return true;
+// Transação + IDs fixos: dois aparelhos fazendo o primeiro login juntos não duplicam a grade.
+let cargando = null;
+export function cargaInicial(grade, ancoras, idTurma) {
+  cargando ??= runTransaction(db, async tx => {
+    const snap = await tx.get(cfgCiclo());
+    if (snap.exists()) return false;
+    grade.forEach(t => tx.set(doc(db, "grade", idTurma(t)), t));
+    tx.set(cfgCiclo(), { ancoras });
+    return true;
+  }).finally(() => { cargando = null; });
+  return cargando;
 }
 
 export { updateDoc };

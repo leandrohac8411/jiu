@@ -33,14 +33,15 @@ export function toast(texto) {
 }
 
 // Folha que sobe de baixo. conteudo(el, fechar) monta o que vai dentro.
-export function abrirFolha(conteudo) {
+// aoDispensar roda quando a pessoa fecha tocando fora da folha.
+export function abrirFolha(conteudo, aoDispensar) {
   const fundo = document.createElement("div");
   fundo.className = "folha-fundo";
   const folha = document.createElement("div");
   folha.className = "folha"; folha.setAttribute("role", "dialog"); folha.setAttribute("aria-modal", "true");
   fundo.appendChild(folha);
   const fechar = () => fundo.remove();
-  fundo.addEventListener("click", e => { if (e.target === fundo) fechar(); });
+  fundo.addEventListener("click", e => { if (e.target === fundo) { fechar(); aoDispensar?.(); } });
   document.body.appendChild(fundo);
   conteudo(folha, fechar);
   return fechar;
@@ -53,7 +54,7 @@ export function perguntar(titulo, texto, sim = "Sim", nao = "Agora não") {
       el.innerHTML = `<h3>${esc(titulo)}</h3>${texto ? `<p class="muted" style="margin:0">${esc(texto)}</p>` : ""}
         <div class="acoes"><button class="btn ghost" data-r="0">${esc(nao)}</button><button class="btn" data-r="1">${esc(sim)}</button></div>`;
       el.querySelectorAll("[data-r]").forEach(b => b.onclick = () => { fechar(); resolve(b.dataset.r === "1"); });
-    });
+    }, () => resolve(false));
   });
 }
 

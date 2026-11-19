@@ -26,3 +26,11 @@ test("diasEntre atravessa meses e anos", () => {
   assert.equal(diasEntre("2026-12-28", "2027-01-04"), 7);
   assert.equal(diasEntre("2026-11-23", "2026-11-16"), -7);
 });
+
+import { dataValida } from "../js/logica/datas.js";
+test("data válida: só YYYY-MM-DD de verdade", () => {
+  assert.equal(dataValida("2026-11-18"), true);
+  assert.equal(dataValida("2026-02-30"), false);
+  assert.equal(dataValida("18/11/2026"), false);
+  assert.equal(dataValida(undefined), false);
+});
