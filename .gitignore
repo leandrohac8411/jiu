@@ -4,3 +4,4 @@ node_modules/
 tools/carga/curriculo.json
 tools/carga/service-account.json
 *.log
+dev/
