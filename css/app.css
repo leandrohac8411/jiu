@@ -108,36 +108,51 @@ textarea.input{min-height:72px;resize:vertical}
 .nav svg{width:24px;height:24px;stroke:currentColor;fill:none;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
 .nav a.on{color:var(--red);background:var(--red-soft);font-weight:800}
 
-/* Login */
-/* Login: cartão com borda no meio da tela e, embaixo, as cores das faixas numa caixa */
-/* Login ocupa a tela inteira, como um app: moldura na borda da tela,
-   logo no terço de cima, formulário no meio e as faixas presas embaixo. */
-#tela.login{padding:28px max(30px,env(safe-area-inset-left,0px)) 24px max(30px,env(safe-area-inset-right,0px))}
-.login{flex:1;display:flex;flex-direction:column;min-height:100vh;min-height:100dvh;
-  background:radial-gradient(130% 45% at 50% 0%,var(--red-soft) 0%,var(--bg) 62%)}
-.login::before{content:"";position:fixed;inset:max(8px,env(safe-area-inset-top,0px)) 8px max(8px,env(safe-area-inset-bottom,0px));
-  border:1.5px solid var(--line);border-radius:28px;pointer-events:none;z-index:1}
-.login{justify-content:space-evenly}
-.login-topo{display:flex;flex-direction:column;align-items:center;gap:8px;text-align:center}
-.login-topo h1{margin:6px 0 0;font-size:26px;font-weight:800;letter-spacing:-.01em}
-.login-topo h1::after{content:"";display:block;width:34px;height:3px;background:var(--red);border-radius:2px;margin:10px auto 0}
-.login-topo p{margin:0;max-width:30ch;font-size:13px;color:var(--muted);text-wrap:balance}
-.login-card{display:flex;flex-direction:column;gap:14px}
-.login-rodape{display:flex;flex-direction:column;align-items:center;gap:10px}
-.login-rodape .faixas{width:100%}
-.login-rodape small{font-size:11px;color:var(--muted)}
-.login .marca{width:150px;height:150px;background:url(../img/logo-gb.png) center/contain no-repeat}
-@media (max-height:700px){ .login .marca{width:110px;height:110px} .login-topo h1{font-size:22px} }
-.login p{margin:0 0 6px;text-align:center;color:var(--muted)}
-.faixas{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;background:#fff;border:1px solid var(--line);border-radius:14px;padding:8px}
-.faixas i{height:12px;border-radius:3px;position:relative}
-.faixas i::after{content:"";position:absolute;right:12%;top:0;bottom:0;width:18%;background:#111}
-.faixas .b{background:#fff;box-shadow:inset 0 0 0 1px #d9d4d3}
+/* Login (modelo enviado pelo Leandro): faixas vermelhas nos cantos, cabeçalho GB | Diário de Tatame,
+   campos com ícone, botão ENTRAR e, embaixo, a faixa azul amarrada sobre o kimono e as cores das faixas. */
+#tela.login{padding:0;position:relative;overflow:hidden;background:#fff}
+.login{flex:1;display:flex;flex-direction:column;min-height:100vh;min-height:100dvh}
+.login .canto{position:absolute;pointer-events:none;z-index:0}
+.login .canto.sup{top:0;left:0;width:150px;height:170px}
+.login .canto.inf{right:0;bottom:0;width:120px;height:106px}
+.login-corpo{position:relative;z-index:1;display:flex;flex-direction:column;gap:16px;
+  padding:calc(46px + env(safe-area-inset-top,0px)) max(26px,env(safe-area-inset-left,0px)) 0 max(26px,env(safe-area-inset-right,0px))}
+.lg-topo{display:flex;align-items:center;justify-content:center;gap:10px;white-space:nowrap}
+.lg-topo .logo{width:46px;height:46px;background-image:url(../img/logo-gb.png)}
+.lg-gb{display:flex;flex-direction:column;line-height:1.05}
+.lg-gb b{font-size:15px;font-weight:800;letter-spacing:-.02em}
+.lg-gb span{font-size:10px;font-weight:700;color:var(--muted2);letter-spacing:.02em}
+.lg-div{width:1px;align-self:stretch;background:#d9d4d3}
+.lg-titulo{font-size:15px;font-weight:800;letter-spacing:-.01em}
+.lg-linha{height:1.5px;background:linear-gradient(90deg,transparent,var(--red) 20%,var(--red) 80%,transparent);opacity:.8}
+.lg-h{margin:4px 0 2px;text-align:center;font-size:20px;font-weight:600;color:#2b2a2e}
+.lg-h em{font-style:italic;font-weight:800;color:var(--red);position:relative;white-space:nowrap}
+.lg-h em::after{content:"";position:absolute;left:4%;right:-6%;bottom:-6px;height:6px;
+  background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 8' preserveAspectRatio='none'%3E%3Cpath d='M2 6 Q40 1 98 4' stroke='%23c8201b' stroke-width='2.6' fill='none' stroke-linecap='round'/%3E%3C/svg%3E") center/100% 100% no-repeat}
+.campo{position:relative}
+.campo svg{position:absolute;left:16px;top:50%;transform:translateY(-50%);width:22px;height:22px;stroke:#3d3a40;fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;pointer-events:none}
+.campo .input{padding:15px 48px 15px 50px;border-radius:16px;box-shadow:0 6px 16px -12px rgba(0,0,0,.35)}
+.campo .olho{position:absolute;right:10px;top:50%;transform:translateY(-50%);width:36px;height:36px;display:grid;place-items:center}
+.campo .olho svg{position:static;transform:none}
+.lg-esqueci{align-self:flex-end;color:var(--red);font-weight:700;font-size:13px;text-decoration:underline;text-underline-offset:4px}
+.btn.entrar{display:flex;align-items:center;justify-content:center;gap:12px;font-size:17px;letter-spacing:.06em;border-radius:99px;padding:15px;
+  background:linear-gradient(180deg,#d9271f,#b51a15);box-shadow:0 12px 24px -12px rgba(200,32,27,.7)}
+.btn.entrar svg{width:22px;height:22px;stroke:#fff;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.lg-arte{position:relative;z-index:1;margin-top:auto;overflow:hidden;display:flex;flex-direction:column;align-items:center;gap:12px;
+  padding-bottom:calc(22px + env(safe-area-inset-bottom,0px))}
+.lg-arte .no{display:block;width:118%;max-width:none;height:auto;margin:0 -9% -30px}
+.faixas{display:grid;grid-template-columns:repeat(5,1fr);gap:7px;width:min(320px,82%)}
+.faixas i{height:11px;border-radius:99px;position:relative;overflow:hidden}
+.faixas i::after{content:"";position:absolute;right:10%;top:0;bottom:0;width:18%;background:#111}
+.faixas .b{background:#fff;box-shadow:inset 0 0 0 1px #c9c3c2}
 .faixas .az{background:var(--blue)}
 .faixas .rx{background:var(--purple)}
 .faixas .mr{background:#6b4226}
 .faixas .pt{background:#151517}
 .faixas .pt::after{background:var(--red)}
+.lg-lema{position:relative;z-index:2;font-size:10px;font-weight:600;letter-spacing:.16em;color:#4b474e;display:flex;gap:10px;align-items:center}
+.lg-lema i{width:5px;height:5px;border-radius:50%;background:var(--red)}
+@media (max-height:720px){ .lg-arte .no{max-height:170px;width:auto} .login-corpo{gap:11px} }
 
 /* Check-in */
 .plan{background:var(--fg);color:#fff;border-radius:18px;padding:14px}

@@ -1,13 +1,13 @@
 // Guarda uma cópia do app no celular para abrir mais rápido e sem internet.
 // Arquivos do app: rede primeiro (pega atualizações), cópia se estiver offline.
 // Biblioteca do Firebase (versão fixa): cópia direto.
-const CACHE = "diario-tatame-v5";
+const CACHE = "diario-tatame-v6";
 const SDK = "https://www.gstatic.com/firebasejs/10.12.2/";
 const APP_FILES = [
   "./", "index.html", "css/app.css", "manifest.webmanifest",
   "js/app.js", "js/firebase.js", "js/firebase-config.js", "js/estado.js", "js/dados.js", "js/carga.js", "js/foto.js",
   "js/logica/datas.js", "js/logica/ciclo.js", "js/logica/categorias.js", "js/logica/metas.js", "js/logica/meujogo.js",
-  "js/ui/util.js", "js/ui/icones.js", "js/ui/faixa.js", "js/ui/graficos.js",
+  "js/ui/util.js", "js/ui/icones.js", "js/ui/faixa.js", "js/ui/graficos.js", "js/ui/arteLogin.js",
   "js/telas/comum.js", "js/telas/login.js", "js/telas/inicio.js", "js/telas/checkin.js", "js/telas/grade.js",
   "js/telas/diario.js", "js/telas/aula.js", "js/telas/evolucao.js", "js/telas/perfil.js",
   "img/logo-gb.png", "img/logo-gb-mark.png", "img/gracie-barra.png", "img/icon-192.png"
