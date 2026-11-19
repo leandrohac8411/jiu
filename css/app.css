@@ -112,15 +112,22 @@ textarea.input{min-height:72px;resize:vertical}
 /* Login: cartão com borda no meio da tela e, embaixo, as cores das faixas numa caixa */
 /* Login ocupa a tela inteira, como um app: moldura na borda da tela,
    logo no terço de cima, formulário no meio e as faixas presas embaixo. */
-#tela.login{padding:0}
+#tela.login{padding:28px max(30px,env(safe-area-inset-left,0px)) 24px max(30px,env(safe-area-inset-right,0px))}
 .login{flex:1;display:flex;flex-direction:column;min-height:100vh;min-height:100dvh;
   background:radial-gradient(130% 45% at 50% 0%,var(--red-soft) 0%,var(--bg) 62%)}
 .login::before{content:"";position:fixed;inset:max(8px,env(safe-area-inset-top,0px)) 8px max(8px,env(safe-area-inset-bottom,0px));
   border:1.5px solid var(--line);border-radius:28px;pointer-events:none;z-index:1}
-.login-card{flex:1;display:flex;flex-direction:column;justify-content:center;gap:14px;
-  padding:48px max(30px,env(safe-area-inset-left,0px)) 16px max(30px,env(safe-area-inset-right,0px))}
-.login .faixas{margin:0 30px 30px}
-.login .marca{margin:0 auto 4px;width:140px;height:140px;background:url(../img/logo-gb.png) center/contain no-repeat}
+.login{justify-content:space-evenly}
+.login-topo{display:flex;flex-direction:column;align-items:center;gap:8px;text-align:center}
+.login-topo h1{margin:6px 0 0;font-size:26px;font-weight:800;letter-spacing:-.01em}
+.login-topo h1::after{content:"";display:block;width:34px;height:3px;background:var(--red);border-radius:2px;margin:10px auto 0}
+.login-topo p{margin:0;max-width:30ch;font-size:13px;color:var(--muted);text-wrap:balance}
+.login-card{display:flex;flex-direction:column;gap:14px}
+.login-rodape{display:flex;flex-direction:column;align-items:center;gap:10px}
+.login-rodape .faixas{width:100%}
+.login-rodape small{font-size:11px;color:var(--muted)}
+.login .marca{width:150px;height:150px;background:url(../img/logo-gb.png) center/contain no-repeat}
+@media (max-height:700px){ .login .marca{width:110px;height:110px} .login-topo h1{font-size:22px} }
 .login p{margin:0 0 6px;text-align:center;color:var(--muted)}
 .faixas{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;background:#fff;border:1px solid var(--line);border-radius:14px;padding:8px}
 .faixas i{height:12px;border-radius:3px;position:relative}
