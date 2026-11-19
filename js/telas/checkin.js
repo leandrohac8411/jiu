@@ -69,8 +69,13 @@ export default {
         <div class="plan">
           <div class="k">${modo === "novo" || editando ? `<input id="data" type="date" value="${data}" max="${hoje}" aria-label="Data da aula" style="background:transparent;border:0;color:#fff;font:inherit;width:128px;color-scheme:dark"> · ` : dataCurta(data) + " · "}${modo === "novo" ? `<input id="hora" type="time" value="${esc(f.horario)}" aria-label="Horário" style="background:transparent;border:0;color:#fff;font:inherit;width:72px;color-scheme:dark">` : horaTexto(esc(f.horario))}${f.professor ? " · " + esc(f.professor) : ""}</div>
           ${!programaFixo ? `
-            <p style="margin:8px 0 4px">Qual programa?</p>
-            <div class="yn"><button data-prog="GB1" class="${f.programa === "GB1" ? "on" : ""}">GB1</button><button data-prog="GB2" class="${f.programa === "GB2" ? "on" : ""}">GB2</button></div>` : ""}
+            <p style="margin:8px 0 4px">${turma?.programa === "GB1+GB2" ? "Turma GB1 + GB2: qual currículo foi dado?" : "Qual programa?"}</p>
+            <div class="yn">${["GB1", "GB2"].map(p => {
+              const prev = aulaPrevista(data, { programa: p, aula: turma?.aula ?? null }, e.ancoras);
+              const c = conteudoPrevisto(e.curriculo, prev);
+              const dica = prev.semana ? `Sem. ${prev.semana}${c ? " · " + esc(temaCurto(c.tema)) : ""}` : "";
+              return `<button data-prog="${p}" class="${f.programa === p ? "on" : ""}">${p}${dica ? `<small style="display:block;font-weight:600;font-size:10.5px;opacity:.8;margin-top:2px">${dica}</small>` : ""}</button>`;
+            }).join("")}</div>` : ""}
           ${definido ? `
             <h4>${titulo}</h4>
             ${sub ? `<p>${sub}</p>` : ""}

@@ -78,16 +78,25 @@ function editarTurma(t) {
     folha.innerHTML = `<h3>${t.id ? "Editar turma" : "Nova turma"}</h3>
       <div class="field"><label for="dia">Dia</label><select class="input" id="dia">${[1, 2, 3, 4, 5, 6, 0].map(d => opt(d, t.diaSemana, ["Domingo", "Segunda", "Terça", "Quarta", "Quinta", "Sexta", "Sábado"][d])).join("")}</select></div>
       <div class="field"><label for="hora">Horário</label><input class="input" id="hora" type="time" value="${esc(t.horario)}"></div>
-      <div class="field"><label for="prog">Programa</label><select class="input" id="prog">${opt("a definir", t.programa)}${opt("GB1", t.programa)}${opt("GB2", t.programa)}</select></div>
+      <div class="field"><label>Programa (marque os dois se GB1 e GB2 treinam juntos)</label>
+        <div class="chips">${["GB1", "GB2"].map(p => `<button type="button" class="chip ${String(t.programa).includes(p) ? "on" : ""}" data-p="${p}" aria-pressed="${String(t.programa).includes(p)}">${p}</button>`).join("")}</div></div>
       <div class="field"><label for="aula">Aula</label><select class="input" id="aula">${opt("", t.aula ?? "", "A definir (seg/ter = A, qua/qui = B)")}${opt("A", t.aula ?? "", "Sempre A")}${opt("B", t.aula ?? "", "Sempre B")}</select></div>
       <div class="field"><label for="prof">Professor</label><input class="input" id="prof" value="${esc(t.professor)}"></div>
       <div class="field"><label for="dur">Duração (min)</label><input class="input" id="dur" type="number" min="10" max="240" step="5" value="${esc(t.duracaoMin || 60)}"></div>
       <div class="acoes"><button class="btn ghost" id="c">Cancelar</button><button class="btn" id="ok">Salvar</button></div>
       ${t.id ? '<button class="out" id="del">Excluir turma</button>' : ""}`;
     const v = id => folha.querySelector("#" + id).value;
+    folha.querySelectorAll("[data-p]").forEach(b => b.onclick = () => {
+      const on = !b.classList.contains("on");
+      b.classList.toggle("on", on); b.setAttribute("aria-pressed", on);
+    });
+    const programa = () => {
+      const marcados = [...folha.querySelectorAll("[data-p].on")].map(b => b.dataset.p);
+      return marcados.length === 2 ? "GB1+GB2" : marcados[0] || "a definir";
+    };
     folha.querySelector("#c").onclick = fechar;
     folha.querySelector("#ok").onclick = async () => {
-      await salvarTurma({ ...t, diaSemana: Number(v("dia")), horario: v("hora") || t.horario, programa: v("prog"), aula: v("aula") || null, professor: v("prof").trim(), duracaoMin: Number(v("dur")) || 60, ativa: true });
+      await salvarTurma({ ...t, diaSemana: Number(v("dia")), horario: v("hora") || t.horario, programa: programa(), aula: v("aula") || null, professor: v("prof").trim(), duracaoMin: Number(v("dur")) || 60, ativa: true });
       fechar(); toast("Turma salva.");
     };
     const del = folha.querySelector("#del");

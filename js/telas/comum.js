@@ -19,7 +19,10 @@ export function conteudoPrevisto(curriculo, prev) {
 }
 
 export function etiquetaPrograma(p) {
-  return p === "GB1" ? '<span class="tag gb1">GB1</span>' : p === "GB2" ? '<span class="tag gb2">GB2</span>' : '<span class="tag">a definir</span>';
+  const tags = [];
+  if (String(p).includes("GB1")) tags.push('<span class="tag gb1">GB1</span>');
+  if (String(p).includes("GB2")) tags.push('<span class="tag gb2">GB2</span>');
+  return tags.length ? `<span style="display:flex;gap:4px">${tags.join("")}</span>` : '<span class="tag">a definir</span>';
 }
 
 // Põe a foto (base64) como fundo de um elemento quando ela chegar.

@@ -27,9 +27,12 @@ export default {
       const passou = minutosDe(t.horario) + (Number(t.duracaoMin) || 60) < agora;
       const prev = aulaPrevista(hoje, t, e.ancoras);
       const cont = conteudoPrevisto(e.curriculo, prev);
-      let sub = prev.programa === "a definir" ? "GB1 ou GB2?" :
+      const mista = prev.programa === "GB1+GB2";
+      const temaDe = p => { const c = conteudoPrevisto(e.curriculo, aulaPrevista(hoje, { ...t, programa: p }, e.ancoras)); return c ? temaCurto(c.tema) : "tema a registrar"; };
+      let sub = mista ? `GB1: ${temaDe("GB1")} · GB2: ${temaDe("GB2")}` :
+        prev.programa === "a definir" ? "GB1 ou GB2?" :
         cont ? temaCurto(cont.tema) : `Semana ${prev.semana ?? "?"} · tema a registrar`;
-      const prog = prev.programa === "a definir" ? "Turma" : prev.programa;
+      const prog = mista ? "GB1 + GB2" : prev.programa === "a definir" ? "Turma" : prev.programa;
       const prof = t.professor ? ` · ${esc(t.professor)}` : "";
       let cls = "row", acao = "Check-in", destino = `#checkin/${t.id}/${hoje}`;
       if (feito) { cls += " feito"; acao = "Feito ✓"; destino = `#aula/${feito.id}`; }

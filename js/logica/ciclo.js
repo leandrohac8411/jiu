@@ -46,3 +46,9 @@ export function sugerirFixarAula(aulasDaTurma, turma) {
   if (corrigida(a) && corrigida(b) && a.realizada.aula === b.realizada.aula) return a.realizada.aula;
   return null;
 }
+
+// Programas de uma turma: "GB1", "GB2", mista "GB1+GB2" ou "a definir".
+export function programasDaTurma(turma) {
+  const p = turma?.programa || "";
+  return ["GB1", "GB2"].filter(x => p.includes(x));
+}

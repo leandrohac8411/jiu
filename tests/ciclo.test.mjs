@@ -74,3 +74,14 @@ test("não sugere com uma correção só, nem se a turma já tem aula fixa", () 
   assert.equal(sugerirFixarAula([corr, ok], { aula: null }), null);
   assert.equal(sugerirFixarAula([corr, corr], { aula: "B" }), null);
 });
+
+import { programasDaTurma } from "../js/logica/ciclo.js";
+test("turma mista GB1+GB2 tem os dois programas", () => {
+  assert.deepEqual(programasDaTurma({ programa: "GB1+GB2" }), ["GB1", "GB2"]);
+  assert.deepEqual(programasDaTurma({ programa: "GB2" }), ["GB2"]);
+  assert.deepEqual(programasDaTurma({ programa: "a definir" }), []);
+});
+
+test("turma mista não tem semana própria: o check-in pergunta o programa", () => {
+  assert.equal(aulaPrevista("2026-11-18", { programa: "GB1+GB2", aula: null }, ancoras).semana, null);
+});
