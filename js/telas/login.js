@@ -7,6 +7,7 @@ export default {
   classe: "sem-menu login",
   montar(el) {
     el.innerHTML = `
+      <div class="login-card">
       <div class="marca" role="img" aria-label="Gracie Barra"></div>
       <p>GB Sobradinho</p>
       <form id="f" class="field" style="gap:12px" novalidate>
@@ -18,7 +19,10 @@ export default {
         <button class="btn" type="submit" id="entrar">Entrar</button>
       </form>
       <button class="link" id="esqueci" type="button">Esqueci minha senha</button>
-      <div class="stripe"></div>`;
+      </div>
+      <div class="faixas" role="img" aria-label="Faixas: branca, azul, roxa, marrom e preta">
+        <i class="b"></i><i class="az"></i><i class="rx"></i><i class="mr"></i><i class="pt"></i>
+      </div>`;
     const $ = id => el.querySelector("#" + id);
     $("f").addEventListener("submit", async e => {
       e.preventDefault();
