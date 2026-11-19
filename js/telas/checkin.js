@@ -4,7 +4,7 @@ import { aulaPrevista, sugerirFixarAula, CICLO_SEMANAS } from "../logica/ciclo.j
 import { CATEGORIAS } from "../logica/meujogo.js";
 import { salvarAula, salvarFoto, excluirFoto, salvarCurriculo, salvarTurma } from "../dados.js";
 import { comprimirImagem } from "../foto.js";
-import { esc, dataCurta, horaTexto, toast, abrirFolha, perguntar } from "../ui/util.js";
+import { esc, temaCurto, posicaoDoTema, dataCurta, horaTexto, toast, abrirFolha, perguntar } from "../ui/util.js";
 import { conteudoPrevisto, wm, pintarFoto } from "./comum.js";
 import { irPara } from "../app.js";
 
@@ -57,9 +57,9 @@ export default {
       const cont = definido ? conteudoPrevisto(e.curriculo, f.sel) : null;
       const igual = f.sel && f.prevista && !f.temaLivre && f.sel.semana === f.prevista.semana && f.sel.aula === f.prevista.aula;
       const titulo = f.temaLivre ? esc(f.temaLivre)
-        : cont ? `Semana ${f.sel.semana}: ${esc((cont.tema || "").replace(/^[^:]*:\s*/, ""))}`
+        : cont ? `Semana ${f.sel.semana}: ${esc(temaCurto(cont.tema))}`
         : definido ? `Semana ${f.sel?.semana ?? "?"} · tema a registrar` : "";
-      const sub = cont && !f.temaLivre ? esc((cont.tema || "").split(":")[0]) : "";
+      const sub = cont && !f.temaLivre ? esc(posicaoDoTema(cont.tema)) : "";
 
       el.innerHTML = `
         <div class="ttl"><a class="back" href="#inicio" aria-label="Voltar">←</a>${editando ? "Editar aula" : "Check-in"}${wm}</div>

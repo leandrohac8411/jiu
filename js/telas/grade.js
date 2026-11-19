@@ -1,7 +1,7 @@
 import { hojeISO, segundaDaSemana, somarDias, deISO } from "../logica/datas.js";
 import { semanaDoCiclo, CICLO_SEMANAS } from "../logica/ciclo.js";
 import { salvarTurma, excluirTurma, adicionarAncora, chaveCurriculo } from "../dados.js";
-import { esc, horaTexto, abrirFolha, perguntar, toast } from "../ui/util.js";
+import { esc, temaCurto, posicaoDoTema, horaTexto, abrirFolha, perguntar, toast } from "../ui/util.js";
 import { wm, turmasDoDia, etiquetaPrograma } from "./comum.js";
 
 const NOMES = ["dom", "seg", "ter", "qua", "qui", "sex", "sáb"];
@@ -32,9 +32,9 @@ export default {
       return `<div class="card cyc">
         <div class="k">Ciclo ${p} · semana ${s} de ${CICLO_SEMANAS}</div>
         <div class="cycbar" aria-hidden="true">${Array.from({ length: CICLO_SEMANAS }, (_, i) => `<i class="${i + 1 < s ? "done" : i + 1 === s ? "cur" : ""}"></i>`).join("")}</div>
-        <h4>${esc(tema ? tema.replace(/^[^:]*:\s*/, "") : "Tema a registrar")}</h4>
-        ${tema ? `<p>${esc(tema.split(":")[0])}</p>` : `<p>O tema entra quando vocês registrarem a primeira aula ${p} desta semana.</p>`}
-        <div class="sec" style="font-weight:600"><span>Próxima · semana ${prox}</span><span>${esc(temaProx ? temaProx.replace(/^[^:]*:\s*/, "") : "a registrar")}</span></div>
+        <h4>${esc(tema ? temaCurto(tema) : "Tema a registrar")}</h4>
+        ${tema ? `<p>${esc(posicaoDoTema(tema))}</p>` : `<p>O tema entra quando vocês registrarem a primeira aula ${p} desta semana.</p>`}
+        <div class="sec" style="font-weight:600"><span>Próxima · semana ${prox}</span><span>${esc(temaProx ? temaCurto(temaProx) : "a registrar")}</span></div>
         <button class="link" data-ajustar="${p}" style="text-align:left">Ajustar semana</button>
       </div>`;
     }).join("");

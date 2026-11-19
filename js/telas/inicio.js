@@ -3,7 +3,7 @@ import { aulaPrevista, semanaDoCiclo } from "../logica/ciclo.js";
 import { progressoRoxa, progressoSemana, progressoMes, horasTatame } from "../logica/metas.js";
 import { faixaSVG } from "../ui/faixa.js";
 import { anelSVG } from "../ui/graficos.js";
-import { esc, saudacao, iniciais, dataCurta, horaTexto, numero } from "../ui/util.js";
+import { esc, temaCurto, saudacao, iniciais, dataCurta, horaTexto, numero } from "../ui/util.js";
 import { turmasDoDia, conteudoPrevisto, pintarFoto, minutosAgora, minutosDe } from "./comum.js";
 
 export default {
@@ -28,7 +28,7 @@ export default {
       const prev = aulaPrevista(hoje, t, e.ancoras);
       const cont = conteudoPrevisto(e.curriculo, prev);
       let sub = prev.programa === "a definir" ? "GB1 ou GB2?" :
-        cont ? (cont.tema || "").replace(/^[^:]*:\s*/, "") : `Semana ${prev.semana ?? "?"} · tema a registrar`;
+        cont ? temaCurto(cont.tema) : `Semana ${prev.semana ?? "?"} · tema a registrar`;
       const prog = prev.programa === "a definir" ? "Turma" : prev.programa;
       const prof = t.professor ? ` · ${esc(t.professor)}` : "";
       let cls = "row", acao = "Check-in", destino = `#checkin/${t.id}/${hoje}`;

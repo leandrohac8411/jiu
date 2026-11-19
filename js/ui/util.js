@@ -56,3 +56,7 @@ export function perguntar(titulo, texto, sim = "Sim", nao = "Agora não") {
     });
   });
 }
+
+// "Costas / 4 apoios: pegada de costas…" → "Pegada de costas…" (e a posição, separada)
+export const temaCurto = t => { const s = String(t || "").replace(/^[^:]*:\s*/, ""); return s ? s[0].toUpperCase() + s.slice(1) : ""; };
+export const posicaoDoTema = t => (String(t || "").includes(":") ? String(t).split(":")[0] : "");
