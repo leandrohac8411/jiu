@@ -20,27 +20,33 @@ export default {
   classe: "sem-menu login",
   montar(el) {
     el.innerHTML = `
-      <div class="login-corpo">
-        <div class="lg-topo">
-          <div class="logo" role="img" aria-label="Gracie Barra"></div>
-          <div class="lg-gb"><b>GRACIE BARRA</b><span>GB SOBRADINHO</span></div>
-          <div class="lg-div"></div>
-          <div class="lg-titulo">Diário de Tatame</div>
-        </div>
-        <div class="lg-linha"></div>
-        <h1 class="lg-h">Acesse sua jornada no <em>tatame</em></h1>
-        <form id="f" class="field" style="gap:12px" novalidate>
-          <div class="campo">${ic.email}<input class="input" id="email" type="email" placeholder="E-mail" aria-label="E-mail" autocomplete="username" inputmode="email" required></div>
-          <div class="campo">${ic.senha}<input class="input" id="senha" type="password" placeholder="Senha" aria-label="Senha" autocomplete="current-password" required>
-            <button type="button" class="olho" id="olho" aria-label="Mostrar senha">${ic.olho}</button></div>
-          <button class="lg-esqueci" id="esqueci" type="button">Esqueci minha senha</button>
-          <p id="erro" class="aviso" hidden></p>
-          <button class="btn entrar" type="submit" id="entrar">${ic.entrar}<span>ENTRAR</span></button>
+      <div class="lp-fundo" aria-hidden="true"></div>
+      <div class="lp-conteudo">
+        <header class="lp-marca">
+          <div class="lp-linha-marca">
+            <div class="lp-gb">
+              <img class="lp-logo" src="img/logo-gracie-referencia.png" alt="Gracie Barra">
+              <div class="lp-gb-texto"><strong>GRACIE BARRA</strong><span>GB SOBRADINHO</span></div>
+            </div>
+            <span class="lp-separador" aria-hidden="true"></span>
+            <h1 class="lp-app">Diário de Tatame</h1>
+          </div>
+          <div class="lp-regua" aria-hidden="true"></div>
+          <p class="lp-frase">Acesse sua jornada no <em>tatame</em></p>
+        </header>
+        <form id="f" class="lp-form" novalidate>
+          <div class="lp-grupo"><label for="email">E-mail</label>
+            <div class="lp-campo">${ic.email}<input id="email" type="email" placeholder="seu@email.com" autocomplete="username" inputmode="email" required></div></div>
+          <div class="lp-grupo"><label for="senha">Senha</label>
+            <div class="lp-campo">${ic.senha}<input id="senha" type="password" placeholder="Digite sua senha" autocomplete="current-password" required>
+              <button type="button" class="lp-olho" id="olho" aria-label="Mostrar senha">${ic.olho}</button></div></div>
+          <div class="lp-esqueci"><button type="button" id="esqueci">Esqueci minha senha</button></div>
+          <button class="lp-entrar" type="submit" id="entrar">${ic.entrar}<span>ENTRAR</span></button>
         </form>
-        <div class="lg-ou"><span>OU</span></div>
-        <button class="lg-bio" id="bio" type="button">${ehIOS ? ic.faceid : ic.digital}<span>${ehIOS ? "Entrar com Face ID" : "Acesso com biometria"}</span></button>
-      </div>
-      <div class="lg-arte" role="img" aria-label="Faixa azul amarrada sobre o kimono da Gracie Barra; faixas branca, azul, roxa, marrom e preta; disciplina, constância, evolução"></div>`;
+        <div class="lp-ou"><span>ou</span></div>
+        <button class="lp-bio" id="bio" type="button">${ehIOS ? ic.faceid : ic.digital}<span>${ehIOS ? "Entrar com Face ID" : "Acesso com biometria"}</span></button>
+        <p class="lp-aviso" id="erro" role="status" aria-live="polite"></p>
+      </div>`;
     const $ = id => el.querySelector("#" + id);
     const btnTexto = t => { $("entrar").querySelector("span").textContent = t; };
     $("olho").onclick = () => {
@@ -65,7 +71,7 @@ export default {
     };
     $("f").addEventListener("submit", async e => {
       e.preventDefault();
-      $("erro").hidden = true;
+      $("erro").textContent = "";
       $("entrar").disabled = true; btnTexto("ENTRANDO…");
       try {
         await entrar($("email").value, $("senha").value);
@@ -74,15 +80,15 @@ export default {
         }
       } catch {
         $("erro").textContent = "E-mail ou senha incorretos.";
-        $("erro").hidden = false;
+       
         $("entrar").disabled = false; btnTexto("ENTRAR");
       }
     });
     $("esqueci").onclick = async () => {
       const email = $("email").value.trim();
-      if (!email) { $("erro").textContent = "Digite seu e-mail acima para receber o link."; $("erro").hidden = false; return; }
+      if (!email) { $("erro").textContent = "Digite seu e-mail acima para receber o link."; return; }
       try { await redefinirSenha(email); toast("Enviamos um link para o seu e-mail."); }
-      catch { $("erro").textContent = "Não consegui enviar. Confira o e-mail."; $("erro").hidden = false; }
+      catch { $("erro").textContent = "Não consegui enviar. Confira o e-mail."; }
     };
   }
 };
