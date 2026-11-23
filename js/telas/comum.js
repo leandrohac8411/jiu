@@ -2,7 +2,6 @@
 import { diaSemana } from "../logica/datas.js";
 import { chaveCurriculo, lerFoto } from "../dados.js";
 
-export const wm = '<img class="wm" src="img/gracie-barra.png" alt="Gracie Barra">';
 
 export function turmasDoDia(grade, iso) {
   const d = diaSemana(iso);

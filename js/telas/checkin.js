@@ -6,7 +6,7 @@ import { CATEGORIAS } from "../logica/meujogo.js";
 import { salvarAula, salvarFoto, excluirFoto, salvarCurriculo, salvarTurma } from "../dados.js";
 import { comprimirImagem } from "../foto.js";
 import { esc, temaCurto, posicaoDoTema, dataCurta, horaTexto, toast, abrirFolha, perguntar } from "../ui/util.js";
-import { conteudoPrevisto, wm, pintarFoto } from "./comum.js";
+import { conteudoPrevisto, pintarFoto } from "./comum.js";
 import { irPara } from "../app.js";
 
 const RES = [["nao", "Não saiu", "bad"], ["asvezes", "Às vezes", "mid"], ["bem", "Saiu bem", "good"]];
@@ -65,7 +65,7 @@ export default {
       const sub = cont && !f.temaLivre ? esc(posicaoDoTema(cont.tema)) : "";
 
       el.innerHTML = `
-        <div class="ttl"><a class="back" href="#inicio" aria-label="Voltar">←</a>${editando ? "Editar aula" : "Check-in"}${wm}</div>
+        <div class="ttl"><a class="back" href="#inicio" aria-label="Voltar">←</a>${editando ? "Editar aula" : "Check-in"}</div>
         <div class="plan">
           <div class="k">${modo === "novo" || editando ? `<input id="data" type="date" value="${data}" max="${hoje}" aria-label="Data da aula" style="background:transparent;border:0;color:#fff;font:inherit;width:128px;color-scheme:dark"> · ` : dataCurta(data) + " · "}${modo === "novo" ? `<input id="hora" type="time" value="${esc(f.horario)}" aria-label="Horário" style="background:transparent;border:0;color:#fff;font:inherit;width:72px;color-scheme:dark">` : horaTexto(esc(f.horario))}${f.professor ? " · " + esc(f.professor) : ""}</div>
           ${!programaFixo ? `

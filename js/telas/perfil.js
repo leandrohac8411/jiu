@@ -25,7 +25,6 @@ export default {
 
     el.innerHTML = `
       <div class="pf">
-        <img class="wm" src="img/gracie-barra.png" alt="Gracie Barra">
         <label class="foto" for="arqFoto" style="cursor:pointer" aria-label="Trocar foto de perfil"><span class="ini">${esc(iniciais(p.nome))}</span><i>📷</i></label>
         <input id="arqFoto" type="file" accept="image/*" hidden>
         <h3>${esc(p.nome)}</h3><small class="muted">GB Sobradinho</small>

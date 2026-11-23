@@ -4,7 +4,6 @@ import { CATEGORIAS, notasPorCategoria, precisaMelhorar, indoBem } from "../logi
 import { meiaLuaSVG, radarSVG } from "../ui/graficos.js";
 import { faixaSVG } from "../ui/faixa.js";
 import { esc, dataLonga, nomeMes } from "../ui/util.js";
-import { wm } from "./comum.js";
 
 let aba = "historico";
 let mesVisto = null; // { ano, mes }
@@ -80,7 +79,7 @@ export default {
     if (params[0] && ["historico", "frequencia", "jogo"].includes(params[0])) aba = params[0];
     if (!mesVisto) { const h = deISO(hoje); mesVisto = { ano: h.ano, mes: h.mes }; }
     const corpo = aba === "historico" ? historico(e, hoje) : aba === "frequencia" ? frequencia(e, hoje) : meuJogo(e);
-    el.innerHTML = `<div class="ttl">${aba === "jogo" ? "Meu jogo" : "Evolução"}${wm}</div>${corpo}`;
+    el.innerHTML = `<div class="ttl">${aba === "jogo" ? "Meu jogo" : "Evolução"}</div>${corpo}`;
     el.querySelectorAll("[data-aba]").forEach(b => b.onclick = () => { aba = b.dataset.aba; this.montar(el, [], ctx); });
     el.querySelectorAll("[data-m]").forEach(b => b.onclick = () => {
       let { ano, mes } = mesVisto; mes += Number(b.dataset.m);

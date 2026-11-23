@@ -36,7 +36,6 @@ body:has(#tela.login)::before{display:none}
 
 /* Títulos */
 .ttl{display:flex;align-items:center;gap:10px;font-size:22px;font-weight:800;margin:2px 0 0}
-.ttl .wm{display:block;height:30px;width:auto;margin-left:auto}
 .back{width:36px;height:36px;border-radius:50%;background:var(--soft);display:grid;place-items:center;font-size:17px;flex:none}
 .k{font-size:10.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
 .muted{color:var(--muted)}
@@ -265,7 +264,6 @@ textarea.input{min-height:72px;resize:vertical}
 
 /* Perfil */
 .pf{display:flex;flex-direction:column;align-items:center;gap:6px;margin-top:4px}
-.pf .wm{height:30px;width:auto}
 .pf .foto{width:84px;height:84px;font-size:32px}
 .pf .foto i{width:26px;height:26px;font-size:12px}
 .pf h3{margin:8px 0 0;font-size:20px}

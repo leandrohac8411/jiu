@@ -2,7 +2,7 @@ import { hojeISO, segundaDaSemana, somarDias, deISO } from "../logica/datas.js";
 import { semanaDoCiclo, CICLO_SEMANAS } from "../logica/ciclo.js";
 import { salvarTurma, excluirTurma, adicionarAncora, chaveCurriculo } from "../dados.js";
 import { esc, temaCurto, posicaoDoTema, horaTexto, abrirFolha, perguntar, toast } from "../ui/util.js";
-import { wm, turmasDoDia, etiquetaPrograma } from "./comum.js";
+import { turmasDoDia, etiquetaPrograma } from "./comum.js";
 
 const NOMES = ["dom", "seg", "ter", "qua", "qui", "sex", "sáb"];
 let diaEscolhido = null;
@@ -40,7 +40,7 @@ export default {
     }).join("");
 
     el.innerHTML = `
-      <div class="ttl">Grade${wm}</div>
+      <div class="ttl">Grade</div>
       <div class="days">${dias.map(d => `<button data-dia="${d}" class="${d === diaEscolhido ? "on" : ""} ${d === hoje ? "tod" : ""}">${NOMES[new Date(d + "T12:00").getDay()]}<b>${deISO(d).dia}</b></button>`).join("")}</div>
       ${ciclos}
       <div class="cls">${turmas.map(t => `

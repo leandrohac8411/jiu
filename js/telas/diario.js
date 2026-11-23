@@ -2,7 +2,7 @@ import { ordenarAulas, paraRevisar } from "../logica/metas.js";
 import { salvarFoto, salvarAula } from "../dados.js";
 import { comprimirImagem } from "../foto.js";
 import { esc, dataCurta, mesAno, toast } from "../ui/util.js";
-import { wm, pintarFoto } from "./comum.js";
+import { pintarFoto } from "./comum.js";
 
 const FILTROS = [["todas", "Todas"], ["dificeis", "Mais difíceis"], ["foto", "Com foto"], ["GB1", "GB1"], ["GB2", "GB2"]];
 let filtro = "todas";
@@ -34,7 +34,7 @@ export default {
     }).join("");
 
     el.innerHTML = `
-      <div class="ttl">Diário${wm}</div>
+      <div class="ttl">Diário</div>
       <div class="chips">${FILTROS.map(([v, t]) => `<button class="chip ${filtro === v ? "on" : ""}" data-f="${v}">${t}</button>`).join("")}</div>
       ${revisar.length ? `<div class="review"><div class="k" style="color:var(--red)">Para revisar</div>
         <h4>${revisar.length} ${revisar.length === 1 ? "técnica" : "técnicas"} para treinar de novo</h4>
