@@ -52,7 +52,6 @@ export default {
 
     el.innerHTML = `
       <header class="topo-ini">
-        <div class="topo-kimono" aria-hidden="true"></div>
         <div class="hrow">
           <div class="logo" role="img" aria-label="GB Sobradinho"></div>
           <div class="who"><small>${saudacao()}</small><b>${esc(perfil.nome)}</b></div>

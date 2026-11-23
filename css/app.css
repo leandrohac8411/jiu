@@ -25,6 +25,13 @@ body:has(#tela.login)::before{display:none}
 #tela{flex:1;display:flex;flex-direction:column;gap:14px;
   padding:14px max(18px,env(safe-area-inset-left,0px)) 120px max(18px,env(safe-area-inset-right,0px))}
 #tela.sem-menu{padding-bottom:28px}
+/* Kimono com o patch GB bem clarinho no fundo, no alto à direita de todas as telas
+   (menos login e a tela da aula, que já têm imagem própria). */
+#tela{position:relative;isolation:isolate}
+#tela::before{content:"";position:absolute;z-index:-1;top:2px;right:0;width:300px;max-width:80%;height:96px;opacity:.42;pointer-events:none;
+  background:url(../img/topo-kimono.jpg) center/cover no-repeat;
+  -webkit-mask-image:radial-gradient(ellipse closest-side at 55% 50%,#000 45%,transparent);mask-image:radial-gradient(ellipse closest-side at 55% 50%,#000 45%,transparent)}
+#tela.login::before,#tela.sem-padding::before{display:none}
 #tela.sem-padding{padding:0 0 28px}
 
 /* Títulos */
@@ -297,9 +304,6 @@ textarea.input{min-height:72px;resize:vertical}
 
 /* Início — topo com o patch GB no kimono e grade de hoje em cartão */
 .topo-ini{position:relative;margin:-14px -18px -2px;padding:16px 18px 4px;isolation:isolate;overflow:hidden}
-.topo-kimono{position:absolute;z-index:-1;top:2px;right:-6px;width:300px;height:96px;opacity:.42;
-  background:url(../img/topo-kimono.jpg) center/cover no-repeat;
-  -webkit-mask-image:radial-gradient(ellipse closest-side at 55% 50%,#000 45%,transparent);mask-image:radial-gradient(ellipse closest-side at 55% 50%,#000 45%,transparent)}
 .topo-ini .hrow{margin-top:14px;gap:12px}
 .topo-ini .logo{width:60px;height:60px}
 .topo-ini .who small{font-family:"Barlow",system-ui,sans-serif;font-weight:500;font-size:17px;color:var(--muted2);letter-spacing:.1px}
