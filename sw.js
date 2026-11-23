@@ -1,7 +1,7 @@
 // Guarda uma cópia do app no celular para abrir mais rápido e sem internet.
 // Arquivos do app: rede primeiro (pega atualizações), cópia se estiver offline.
 // Biblioteca do Firebase (versão fixa): cópia direto.
-const CACHE = "diario-tatame-v19";
+const CACHE = "diario-tatame-v20";
 const SDK = "https://www.gstatic.com/firebasejs/10.12.2/";
 const APP_FILES = [
   "./", "index.html", "css/app.css", "manifest.webmanifest",
