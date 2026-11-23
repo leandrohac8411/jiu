@@ -297,8 +297,8 @@ textarea.input{min-height:72px;resize:vertical}
 
 /* Início — topo com o patch GB no kimono e grade de hoje em cartão */
 .topo-ini{position:relative;margin:-14px -18px -2px;padding:16px 18px 4px;isolation:isolate;overflow:hidden}
-.topo-kimono{position:absolute;z-index:-1;inset:0 0 auto 0;height:190px;
-  background:linear-gradient(90deg,var(--bg) 0%,rgba(250,249,248,.9) 42%,rgba(250,249,248,.35) 60%,rgba(250,249,248,0) 72%),url(../img/topo-kimono.jpg) right -84px top/auto 168px no-repeat;
+.topo-kimono{position:absolute;z-index:-1;inset:0 0 auto 0;height:126px;
+  background:linear-gradient(90deg,var(--bg) 0%,rgba(250,249,248,.9) 42%,rgba(250,249,248,.35) 60%,rgba(250,249,248,0) 72%),url(../img/topo-kimono.jpg) right -34px top/auto 122px no-repeat;
   -webkit-mask-image:linear-gradient(#000 58%,transparent);mask-image:linear-gradient(#000 58%,transparent)}
 .topo-marca{display:flex;align-items:center;gap:9px;min-height:46px}
 .tm-logo{width:40px;height:40px;flex:none;background:url(../img/logo-gb-mark.png) center/contain no-repeat;filter:drop-shadow(0 2px 3px #0000001f)}
