@@ -3,7 +3,7 @@ import { categoriaIdade, categoriaPeso } from "../logica/categorias.js";
 import { CATEGORIAS } from "../logica/meujogo.js";
 import { salvarPerfil, salvarFoto, excluirFoto, listarPesos, registrarPeso, importarCurriculo } from "../dados.js";
 import { comprimirImagem } from "../foto.js";
-import { sair } from "../firebase.js";
+import { sairELimpar } from "../firebase.js";
 import { faixaSVG } from "../ui/faixa.js";
 import { esc, iniciais, numero, dataLonga, abrirFolha, perguntar, toast, nomeMes } from "../ui/util.js";
 import { pintarFoto } from "./comum.js";
@@ -105,7 +105,7 @@ export default {
     $("dados").onclick = abrirDados;
 
     $("curriculo").onclick = () => importar();
-    $("sair").onclick = async () => { if (await perguntar("Sair do app?", "", "Sair", "Cancelar")) sair(); };
+    $("sair").onclick = async () => { if (await perguntar("Sair do app?", "Os dados deste aparelho serão apagados; continuam salvos na sua conta.", "Sair", "Cancelar")) sairELimpar(); };
   }
 };
 
@@ -113,7 +113,7 @@ function formulario(titulo, campos, aoSalvar) {
   abrirFolha((folha, fechar) => {
     folha.innerHTML = `<h3>${esc(titulo)}</h3>` + campos.map(c => `<div class="field"><label for="f_${c.id}">${esc(c.rotulo)}</label>${
       c.tipo === "select" ? `<select class="input" id="f_${c.id}">${c.opcoes.map(([v, t]) => `<option value="${v}" ${v === c.valor ? "selected" : ""}>${t}</option>`).join("")}</select>`
-      : `<input class="input" id="f_${c.id}" type="${c.tipo || "text"}" value="${esc(c.valor)}" ${c.passo ? `step="${c.passo}" inputmode="decimal"` : ""} ${c.somenteLeitura ? "readonly" : ""}>`}</div>`).join("") +
+      : `<input class="input" id="f_${c.id}" maxlength="80" type="${c.tipo || "text"}" value="${esc(c.valor)}" ${c.passo ? `step="${c.passo}" inputmode="decimal"` : ""} ${c.somenteLeitura ? "readonly" : ""}>`}</div>`).join("") +
       `<div class="acoes"><button class="btn ghost" id="c">Cancelar</button><button class="btn" id="ok">Salvar</button></div>`;
     folha.querySelector("#c").onclick = fechar;
     folha.querySelector("#ok").onclick = async () => {

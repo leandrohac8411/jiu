@@ -1,3 +1,4 @@
+import { fotoSegura } from "../ui/util.js";
 // Ajudas compartilhadas entre telas.
 import { diaSemana } from "../logica/datas.js";
 import { chaveCurriculo, lerFoto } from "../dados.js";
@@ -28,7 +29,7 @@ export function etiquetaPrograma(p) {
 export async function pintarFoto(uid, fotoId, el) {
   if (!fotoId || !el) return;
   try {
-    const dados = await lerFoto(uid, fotoId);
+    const dados = fotoSegura(await lerFoto(uid, fotoId));
     if (dados && el.isConnected) {
       el.style.backgroundImage = `url(${dados})`;
       el.style.backgroundSize = "cover"; el.style.backgroundPosition = "center";

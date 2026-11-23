@@ -2,7 +2,7 @@
 import { configurado, aoMudarUsuario, sair } from "./firebase.js";
 import { USERS } from "./firebase-config.js";
 import { menuInferior } from "./ui/icones.js";
-import { toast } from "./ui/util.js";
+import { toast, esc } from "./ui/util.js";
 import { hojeISO } from "./logica/datas.js";
 
 const $tela = document.getElementById("tela");
@@ -29,7 +29,8 @@ export function irPara(rota, ...params) {
 }
 
 function lerRota() {
-  const [rota, ...params] = location.hash.replace(/^#/, "").split("/").map(decodeURIComponent);
+  const decodificar = p => { try { return decodeURIComponent(p); } catch { return ""; } }; // "#%E0" não derruba o app
+  const [rota, ...params] = location.hash.replace(/^#/, "").split("/").map(decodificar);
   return { rota: TELAS.includes(rota) ? rota : "inicio", params };
 }
 
@@ -39,7 +40,8 @@ export async function desenhar() {
   else if (rota === "login") rota = "inicio";
   if (rota !== "login" && ctx.estado?.erro) {
     $tela.className = "sem-menu"; $menu.hidden = true;
-    $tela.innerHTML = `<p class="aviso">${ctx.estado.erro}</p><button class="btn ghost" onclick="location.reload()">Tentar de novo</button>`;
+    $tela.innerHTML = `<p class="aviso">${esc(ctx.estado.erro)}</p><button class="btn ghost" id="recarregar">Tentar de novo</button>`;
+    $tela.querySelector("#recarregar").onclick = () => location.reload();
     return;
   }
   if (rota !== "login" && !ctx.estado?.pronto) return; // espera os dados chegarem

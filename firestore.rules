@@ -9,18 +9,76 @@ service cloud.firestore {
           'strandrade@gmail.com'
         ];
     }
+    function dono(uid) { return permitido() && request.auth.uid == uid; }
 
-    // Dados de cada pessoa: só ela lê e grava.
-    match /usuarios/{uid}/{document=**} {
-      allow read, write: if permitido() && request.auth.uid == uid;
+    // Campo opcional de texto com tamanho máximo (barra textos gigantes e tipos errados).
+    function texto(d, campo, max) {
+      return !(campo in d) || d[campo] == null || (d[campo] is string && d[campo].size() <= max);
     }
+    function numeroEntre(d, campo, min, max) {
+      return !(campo in d) || d[campo] == null || (d[campo] is number && d[campo] >= min && d[campo] <= max);
+    }
+    function dataISO(v) { return v is string && v.matches('^[0-9]{4}-[0-9]{2}-[0-9]{2}$'); }
+
+    // ---------- Dados de cada pessoa: só ela lê e grava ----------
     match /usuarios/{uid} {
-      allow read, write: if permitido() && request.auth.uid == uid;
+      allow read, delete: if dono(uid);
+      allow create, update: if dono(uid) && perfilOk(request.resource.data);
+    }
+    function perfilOk(d) {
+      return texto(d, 'nome', 80) && texto(d, 'telefone', 80) && texto(d, 'fotoPerfilId', 64)
+        && texto(d, 'sexo', 20) && texto(d, 'nascimento', 10)
+        && numeroEntre(d, 'metaSemanal', 1, 7) && numeroEntre(d, 'metaAulasRoxa', 1, 2000)
+        && (!('graus' in d) || (d.graus is list && d.graus.size() <= 10));
     }
 
-    // Compartilhado entre os dois.
-    match /grade/{id} { allow read, write: if permitido(); }
-    match /curriculo/{id} { allow read, write: if permitido(); }
-    match /config/{id} { allow read, write: if permitido(); }
+    match /usuarios/{uid}/aulas/{id} {
+      allow read, delete: if dono(uid);
+      // Aula nova só entra com check-in confirmado na academia (o app confere o GPS antes).
+      allow create: if dono(uid) && aulaOk(request.resource.data)
+        && request.resource.data.local.verificado == true;
+      allow update: if dono(uid) && aulaOk(request.resource.data);
+    }
+    function aulaOk(d) {
+      return dataISO(d.data) && texto(d, 'horario', 5) && texto(d, 'professor', 80)
+        && texto(d, 'aprendi', 4000) && texto(d, 'revisar', 4000)
+        && texto(d, 'fotoId', 64) && texto(d, 'fotoMini', 30000)
+        && numeroEntre(d, 'dificuldade', 1, 5) && numeroEntre(d, 'duracaoMin', 1, 600)
+        && (!('tecnicas' in d) || (d.tecnicas is list && d.tecnicas.size() <= 100))
+        && (!('rolaSofri' in d) || (d.rolaSofri is list && d.rolaSofri.size() <= 30));
+    }
+
+    match /usuarios/{uid}/fotos/{id} {
+      allow read, delete: if dono(uid);
+      // Foto já reduzida no aparelho (até ~250 KB); barra arquivos enormes ou que não são texto.
+      allow create, update: if dono(uid) && request.resource.data.dados is string
+        && request.resource.data.dados.size() < 400000;
+    }
+
+    match /usuarios/{uid}/pesos/{id} {
+      allow read, delete: if dono(uid);
+      allow create, update: if dono(uid) && dataISO(request.resource.data.data)
+        && request.resource.data.kg is number && request.resource.data.kg > 0 && request.resource.data.kg < 500;
+    }
+
+    // ---------- Compartilhado entre os dois ----------
+    match /grade/{id} {
+      allow read, delete: if permitido();
+      allow create, update: if permitido()
+        && request.resource.data.horario is string && request.resource.data.horario.matches('^[0-9]{2}:[0-9]{2}$')
+        && request.resource.data.diaSemana is int && request.resource.data.diaSemana >= 0 && request.resource.data.diaSemana <= 6
+        && texto(request.resource.data, 'programa', 20) && texto(request.resource.data, 'professor', 80)
+        && numeroEntre(request.resource.data, 'duracaoMin', 1, 600);
+    }
+    match /curriculo/{id} {
+      allow read: if permitido();
+      allow create, update: if permitido()
+        && request.resource.data.programa in ['GB1', 'GB2']
+        && request.resource.data.semana is int && request.resource.data.semana >= 1 && request.resource.data.semana <= 16;
+    }
+    match /config/ciclo {
+      allow read: if permitido();
+      allow create, update: if permitido() && request.resource.data.ancoras is list && request.resource.data.ancoras.size() <= 200;
+    }
   }
 }

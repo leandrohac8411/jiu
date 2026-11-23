@@ -12,7 +12,14 @@ function carregarImagem(file) {
 // bytes aproximados de um dataURL base64
 const tamanho = dataURL => Math.ceil((dataURL.length - dataURL.indexOf(",") - 1) * 3 / 4);
 
+// Arquivo que não é imagem, ou gigante (trava o celular ao abrir), nem é aberto.
+export const ARQUIVO_MAX = 30 * 1024 * 1024;
+export function arquivoAceito(file) {
+  return !!file && file.size > 0 && file.size <= ARQUIVO_MAX && (!file.type || file.type.startsWith("image/"));
+}
+
 export async function comprimirImagem(file, ladoMax, bytesMax) {
+  if (!arquivoAceito(file)) throw new Error("ilegivel");
   const img = await carregarImagem(file);
   if (!img.naturalWidth || !img.naturalHeight) throw new Error("ilegivel");
   let escala = Math.min(1, ladoMax / Math.max(img.naturalWidth, img.naturalHeight));

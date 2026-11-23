@@ -148,8 +148,8 @@ export default {
           <div class="diff">${[1, 2, 3, 4, 5].map(n => `<button data-d="${n}" class="${f.dificuldade === n ? "on" : ""}">${n}</button>`).join("")}</div>
           <div class="diffl"><span>tranquila</span><span>muito difícil</span></div>
         </div>
-        <div class="field"><label for="aprendi">O que aprendi</label><textarea class="input" id="aprendi" rows="3">${esc(f.aprendi)}</textarea></div>
-        <div class="field"><label for="revisar">O que revisar</label><textarea class="input" id="revisar" rows="2">${esc(f.revisar)}</textarea></div>
+        <div class="field"><label for="aprendi">O que aprendi</label><textarea class="input" maxlength="4000" id="aprendi" rows="3">${esc(f.aprendi)}</textarea></div>
+        <div class="field"><label for="revisar">O que revisar</label><textarea class="input" maxlength="4000" id="revisar" rows="2">${esc(f.revisar)}</textarea></div>
         <div>
           <div class="k">No rola, onde sofri?</div>
           <div class="chips" style="margin-top:6px">${CATEGORIAS.map(c => `<button class="chip ${f.rolaSofri.includes(c) ? "on" : ""}" data-rola="${esc(c)}">${esc(c)}</button>`).join("")}</div>
@@ -219,7 +219,7 @@ export default {
             <select class="input" id="sSem">${Array.from({ length: CICLO_SEMANAS }, (_, i) => i + 1).map(n =>
               `<option value="${n}" ${f.sel?.semana === n ? "selected" : ""}>Semana ${n}${conteudoPrevisto(e.curriculo, { programa: f.programa, semana: n, aula: "A" }) ? "" : " (sem conteúdo)"}</option>`).join("")}</select></div>
           <div class="field"><label>Aula</label><div class="chips">${["A", "B"].map(x => `<button class="chip ${f.sel?.aula === x ? "on" : ""}" data-x="${x}">Aula ${x}</button>`).join("")}</div></div>
-          <div class="field"><label for="sLivre">Ou escreva o tema (aula fora do currículo)</label><input class="input" id="sLivre" value="${esc(f.temaLivre)}" placeholder="Ex.: drills de passagem"></div>
+          <div class="field"><label for="sLivre">Ou escreva o tema (aula fora do currículo)</label><input class="input" maxlength="120" id="sLivre" value="${esc(f.temaLivre)}" placeholder="Ex.: drills de passagem"></div>
           <div class="acoes"><button class="btn ghost" id="cancelar">Cancelar</button><button class="btn" id="ok">Usar esta</button></div>`;
         let aula = f.sel?.aula || "A";
         folha.querySelectorAll("[data-x]").forEach(b => b.onclick = () => {
@@ -242,7 +242,7 @@ export default {
       abrirFolha((folha, fechar) => {
         let cat = null;
         folha.innerHTML = `<h3>Adicionar técnica</h3>
-          <div class="field"><label for="tNome">Nome</label><input class="input" id="tNome" placeholder="Ex.: Raspagem de gancho"></div>
+          <div class="field"><label for="tNome">Nome</label><input class="input" maxlength="150" id="tNome" placeholder="Ex.: Raspagem de gancho"></div>
           <div class="field"><label>Posição</label><div class="chips">${CATEGORIAS.map(c => `<button class="chip" data-c="${esc(c)}">${esc(c)}</button>`).join("")}</div></div>
           <p class="aviso" id="tErro" hidden>Escreva o nome e escolha a posição.</p>
           <div class="acoes"><button class="btn ghost" id="cancelar">Cancelar</button><button class="btn" id="ok">Adicionar</button></div>`;
@@ -329,7 +329,7 @@ export default {
     function pedirTema(tecnicas) {
       return new Promise(resolve => abrirFolha((folha, fechar) => {
         folha.innerHTML = `<h3>Tema da aula</h3>
-          <div class="field"><label for="tema">Como chamar esta aula?</label><input class="input" id="tema" value="${esc(tecnicas.map(t => t.nome).join(" e "))}"></div>
+          <div class="field"><label for="tema">Como chamar esta aula?</label><input class="input" maxlength="150" id="tema" value="${esc(tecnicas.map(t => t.nome).join(" e "))}"></div>
           <button class="btn" id="ok">Salvar</button>`;
         folha.querySelector("#ok").onclick = () => { const v = folha.querySelector("#tema").value.trim(); fechar(); resolve(v); };
       }, () => resolve(null)));

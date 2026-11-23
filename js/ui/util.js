@@ -13,7 +13,10 @@ export const dataCurta = iso => { const { mes, dia } = deISO(iso); return `${DIA
 export const dataLonga = iso => { const { ano, mes, dia } = deISO(iso); return `${dois(dia)}/${dois(mes)}/${ano}`; };
 export const nomeMes = mes => MESES[mes - 1];
 export const mesAno = iso => { const { ano, mes } = deISO(iso); return `${MESES[mes - 1][0].toUpperCase()}${MESES[mes - 1].slice(1)} ${ano}`; };
-export const horaTexto = h => (h || "").replace(":", "h");
+export const horaTexto = h => esc(String(h || "").replace(":", "h"));
+
+// Só aceita foto em base64 de imagem (nada de texto que escape do atributo ou do CSS).
+export const fotoSegura = d => (typeof d === "string" && /^data:image\/(jpeg|png|webp);base64,[A-Za-z0-9+/=]+$/.test(d) ? d : "");
 export const numero = n => String(n).replace(".", ",");
 
 export function saudacao(d = new Date()) {

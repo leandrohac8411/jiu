@@ -1,12 +1,12 @@
 // Guarda uma cópia do app no celular para abrir mais rápido e sem internet.
 // Arquivos do app: rede primeiro (pega atualizações), cópia se estiver offline.
 // Biblioteca do Firebase (versão fixa): cópia direto.
-const CACHE = "diario-tatame-v28";
+const CACHE = "diario-tatame-v29";
 const SDK = "https://www.gstatic.com/firebasejs/10.12.2/";
 const APP_FILES = [
   "./", "index.html", "css/app.css", "manifest.webmanifest",
   "js/app.js", "js/firebase.js", "js/firebase-config.js", "js/estado.js", "js/dados.js", "js/carga.js", "js/foto.js",
-  "js/logica/datas.js", "js/logica/ciclo.js", "js/logica/categorias.js", "js/logica/metas.js", "js/logica/meujogo.js", "js/logica/local.js", "js/logica/tecnicas.js",
+  "js/logica/datas.js", "js/logica/ciclo.js", "js/logica/categorias.js", "js/logica/metas.js", "js/logica/meujogo.js", "js/logica/local.js", "js/logica/tentativas.js", "js/logica/tecnicas.js",
   "js/ui/util.js", "js/ui/icones.js", "js/ui/faixa.js", "js/ui/graficos.js",
   "js/telas/comum.js", "js/telas/login.js", "js/telas/inicio.js", "js/telas/checkin.js", "js/telas/grade.js",
   "js/telas/diario.js", "js/telas/aula.js", "js/telas/evolucao.js", "js/telas/perfil.js",
@@ -30,12 +30,15 @@ self.addEventListener("fetch", event => {
   const url = new URL(req.url);
   if (url.href.startsWith(SDK)) {
     event.respondWith(caches.match(req).then(hit => hit || fetch(req).then(res => {
-      const copia = res.clone(); caches.open(CACHE).then(c => c.put(req, copia)); return res;
+      if (res.ok) { const copia = res.clone(); caches.open(CACHE).then(c => c.put(req, copia)); }
+      return res;
     })));
     return;
   }
   if (url.origin !== location.origin) return;
   event.respondWith(fetch(req).then(res => {
-    const copia = res.clone(); caches.open(CACHE).then(c => c.put(req, copia)); return res;
+    // Só guarda resposta boa: um erro 404/500 não vira a "cópia offline" do arquivo.
+    if (res.ok && res.type === "basic") { const copia = res.clone(); caches.open(CACHE).then(c => c.put(req, copia)); }
+    return res;
   }).catch(() => caches.match(req).then(hit => hit || caches.match("index.html"))));
 });

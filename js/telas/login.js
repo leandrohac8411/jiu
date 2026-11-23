@@ -1,5 +1,18 @@
 import { entrar, redefinirSenha } from "../firebase.js";
 import { toast } from "../ui/util.js";
+import { registrarFalha, registrarSucesso, esperaRestante, tentativasRestantes, normalizar } from "../logica/tentativas.js";
+
+// Tentativas de senha guardadas no aparelho (sobrevivem a recarregar a página).
+const CHAVE = "diario-tatame:login";
+const lerTentativas = () => { try { return normalizar(JSON.parse(localStorage.getItem(CHAVE))); } catch { return normalizar(null); } };
+const gravarTentativas = t => { try { localStorage.setItem(CHAVE, JSON.stringify(t)); } catch { /* modo privado: fica só na memória */ } };
+let tentativasMem = null; // cópia em memória, para o bloqueio valer mesmo sem localStorage
+const tentativas = () => tentativasMem || (tentativasMem = lerTentativas());
+const salvarTentativas = t => { tentativasMem = t; gravarTentativas(t); };
+let ultimoReset = 0;
+
+// Erros do Firebase que significam "senha/e-mail errados" (contam para o bloqueio).
+const ERRO_CREDENCIAL = new Set(["auth/invalid-credential", "auth/wrong-password", "auth/user-not-found", "auth/invalid-email", "auth/invalid-login-credentials"]);
 
 // iPhone/iPad: o botão vira "Entrar com Face ID" (a senha salva nas Chaves do iCloud é liberada pelo Face ID).
 const ehIOS = /iPhone|iPad|iPod/.test(navigator.userAgent) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
@@ -36,9 +49,9 @@ export default {
         </header>
         <form id="f" class="lp-form" novalidate>
           <div class="lp-grupo"><label for="email">E-mail</label>
-            <div class="lp-campo">${ic.email}<input id="email" type="email" placeholder="seu@email.com" autocomplete="username" inputmode="email" required></div></div>
+            <div class="lp-campo">${ic.email}<input id="email" type="email" placeholder="seu@email.com" autocomplete="username" inputmode="email" maxlength="254" autocapitalize="none" spellcheck="false" required></div></div>
           <div class="lp-grupo"><label for="senha">Senha</label>
-            <div class="lp-campo">${ic.senha}<input id="senha" type="password" placeholder="Digite sua senha" autocomplete="current-password" required>
+            <div class="lp-campo">${ic.senha}<input id="senha" type="password" placeholder="Digite sua senha" autocomplete="current-password" maxlength="128" required>
               <button type="button" class="lp-olho" id="olho" aria-label="Mostrar senha">${ic.olho}</button></div></div>
           <div class="lp-esqueci"><button type="button" id="esqueci">Esqueci minha senha</button></div>
           <button class="lp-entrar" type="submit" id="entrar">${ic.entrar}<span>ENTRAR</span></button>
@@ -69,26 +82,64 @@ export default {
         ? "Escolha a senha salva em “Senhas”, acima do teclado. O iPhone confirma com o Face ID."
         : "Escolha a senha salva acima do teclado. O celular confirma com a digital.");
     };
+    // Bloqueio: mostra a contagem e trava o botão até liberar.
+    let relogio = null;
+    const mostrarBloqueio = () => {
+      clearInterval(relogio);
+      const atualizar = () => {
+        if (!el.isConnected) return clearInterval(relogio);
+        const falta = esperaRestante(tentativas(), Date.now());
+        if (!falta) { clearInterval(relogio); $("entrar").disabled = false; btnTexto("ENTRAR"); $("erro").textContent = ""; return; }
+        $("entrar").disabled = true; btnTexto(`AGUARDE ${Math.ceil(falta / 1000)}s`);
+        $("erro").textContent = "Muitas tentativas erradas. Por segurança, espere 1 minuto para tentar de novo.";
+      };
+      atualizar(); relogio = setInterval(atualizar, 1000);
+    };
+    if (esperaRestante(tentativas(), Date.now())) mostrarBloqueio();
+
     $("f").addEventListener("submit", async e => {
       e.preventDefault();
+      if (esperaRestante(tentativas(), Date.now())) return mostrarBloqueio();
+      const email = $("email").value.trim(), senha = $("senha").value;
+      // Campos absurdos nem vão para o servidor.
+      if (!email || !senha) { $("erro").textContent = "Preencha e-mail e senha."; return; }
+      if (email.length > 254 || senha.length > 128 || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { $("erro").textContent = "E-mail ou senha incorretos."; return; }
       $("erro").textContent = "";
       $("entrar").disabled = true; btnTexto("ENTRANDO…");
       try {
-        await entrar($("email").value, $("senha").value);
+        await entrar(email, senha);
+        salvarTentativas(registrarSucesso());
         if ("PasswordCredential" in window) {
           try { await navigator.credentials.store(new PasswordCredential({ id: $("email").value.trim(), password: $("senha").value })); } catch { /* opcional */ }
         }
-      } catch {
-        $("erro").textContent = "E-mail ou senha incorretos.";
-       
+      } catch (err) {
         $("entrar").disabled = false; btnTexto("ENTRAR");
+        const codigo = err?.code || "";
+        if (codigo === "auth/network-request-failed") { $("erro").textContent = "Sem internet. Confira a conexão e tente de novo."; return; }
+        if (codigo === "auth/too-many-requests") {
+          // O próprio Firebase barrou: respeita com o bloqueio local também.
+          salvarTentativas({ falhas: tentativas().falhas, ate: Date.now() + 60_000 });
+          return mostrarBloqueio();
+        }
+        if (codigo === "auth/user-disabled") { $("erro").textContent = "Esta conta está desativada."; return; }
+        const t = registrarFalha(tentativas(), Date.now());
+        salvarTentativas(t);
+        if (esperaRestante(t, Date.now())) return mostrarBloqueio();
+        const resta = tentativasRestantes(t, Date.now());
+        $("erro").textContent = resta <= 2 ? `E-mail ou senha incorretos. Mais ${resta} tentativa${resta === 1 ? "" : "s"} e o acesso fica bloqueado por 1 minuto.` : "E-mail ou senha incorretos.";
+        $("senha").value = ""; $("senha").focus();
       }
     });
     $("esqueci").onclick = async () => {
       const email = $("email").value.trim();
       if (!email) { $("erro").textContent = "Digite seu e-mail acima para receber o link."; return; }
-      try { await redefinirSenha(email); toast("Enviamos um link para o seu e-mail."); }
-      catch { $("erro").textContent = "Não consegui enviar. Confira o e-mail."; }
+      if (email.length > 254 || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { $("erro").textContent = "Confira o e-mail digitado."; return; }
+      // Um pedido por minuto, para ninguém usar o botão para encher a caixa de e-mail de alguém.
+      if (Date.now() - ultimoReset < 60_000) { $("erro").textContent = "Já enviamos um link. Espere 1 minuto para pedir outro."; return; }
+      ultimoReset = Date.now();
+      // Mesma resposta exista ou não a conta (não revela quais e-mails estão cadastrados).
+      try { await redefinirSenha(email); } catch { /* mesma mensagem */ }
+      toast("Se este e-mail tiver conta, enviamos um link para redefinir a senha.");
     };
   }
 };

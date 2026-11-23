@@ -81,7 +81,7 @@ function editarTurma(t) {
       <div class="field"><label>Programa (marque os dois se GB1 e GB2 treinam juntos)</label>
         <div class="chips">${["GB1", "GB2"].map(p => `<button type="button" class="chip ${String(t.programa).includes(p) ? "on" : ""}" data-p="${p}" aria-pressed="${String(t.programa).includes(p)}">${p}</button>`).join("")}</div></div>
       <div class="field"><label for="aula">Aula</label><select class="input" id="aula">${opt("", t.aula ?? "", "A definir (seg/ter = A, qua/qui = B)")}${opt("A", t.aula ?? "", "Sempre A")}${opt("B", t.aula ?? "", "Sempre B")}</select></div>
-      <div class="field"><label for="prof">Professor</label><input class="input" id="prof" value="${esc(t.professor)}"></div>
+      <div class="field"><label for="prof">Professor</label><input class="input" maxlength="80" id="prof" value="${esc(t.professor)}"></div>
       <div class="field"><label for="dur">Duração (min)</label><input class="input" id="dur" type="number" min="10" max="240" step="5" value="${esc(t.duracaoMin || 60)}"></div>
       <div class="acoes"><button class="btn ghost" id="c">Cancelar</button><button class="btn" id="ok">Salvar</button></div>
       ${t.id ? '<button class="out" id="del">Excluir turma</button>' : ""}`;
