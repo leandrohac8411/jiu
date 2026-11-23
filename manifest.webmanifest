@@ -1,6 +1,6 @@
 {
   "name": "Diário de Tatame",
-  "short_name": "Tatame",
+  "short_name": "Diário de Tatame",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
