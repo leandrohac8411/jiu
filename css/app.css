@@ -329,3 +329,12 @@ textarea.input{min-height:72px;resize:vertical}
 .cg-vazio .kimono{width:62px;height:46px;color:#8f8a8e;stroke-width:1.6}
 .cg-vazio p{margin:0;padding-left:18px;border-left:1px solid var(--line);font-size:14px;color:var(--muted2);line-height:1.35}
 .cg-vazio b{display:block;color:var(--fg)}
+
+/* Check-in: aviso de localização (só vale a até 50 m da academia) */
+.local{border-radius:14px;padding:11px 13px;font-size:12.5px;font-weight:600;line-height:1.4;display:flex;flex-wrap:wrap;align-items:center;gap:8px}
+.local>span{flex:1 1 180px}
+.local small{font-weight:500;opacity:.8}
+.local.ok{background:#e6f4ec;color:var(--good)}
+.local.ruim{background:var(--red-soft);color:var(--red)}
+.local.buscando,.local.neutro{background:var(--soft);color:var(--muted2)}
+.local-tentar{margin-left:auto;font-size:12px;font-weight:800;color:var(--red);background:#fff;border:1px solid #f0c9c7;border-radius:10px;padding:6px 10px}

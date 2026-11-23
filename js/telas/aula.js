@@ -4,6 +4,7 @@ import { esc, dataLonga, horaTexto, perguntar, toast } from "../ui/util.js";
 import { pintarFoto } from "./comum.js";
 import { tituloAula } from "./diario.js";
 import { irPara } from "../app.js";
+import { distanciaTexto } from "../logica/local.js";
 
 const COR = { nao: "#c8201b", asvezes: "#d98a16", bem: "#1f8a5b" };
 const TXT = { nao: "não saiu", asvezes: "às vezes", bem: "saiu bem" };
@@ -23,6 +24,7 @@ export default {
           <b>${r.semana ? `Semana ${r.semana} · ` : ""}${esc(tituloAula(a))}</b></div>
       </div>
       <div class="aula-corpo">
+        ${a.local ? `<div class="local ${a.local.verificado ? "ok" : "neutro"}"><span>📍 ${a.local.verificado ? `Check-in feito na academia <small>(${distanciaTexto(a.local.distancia ?? 0)})</small>` : "Lançada depois, sem local"}</span></div>` : ""}
         ${a.tecnicas?.length ? `<div class="chips">${a.tecnicas.map(t => `<span class="chip" style="background:${COR[t.resultado]};color:#fff" title="${TXT[t.resultado]}">${esc(t.nome)}</span>`).join("")}</div>` : ""}
         <div class="card" style="display:flex;justify-content:space-between;align-items:center">
           <div><div class="k">Dificuldade</div><div class="dots" style="margin-top:6px">${[1, 2, 3, 4, 5].map(n => `<i class="${n <= a.dificuldade ? "f" : ""}"></i>`).join("")}</div></div>

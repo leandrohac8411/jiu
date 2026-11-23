@@ -8,6 +8,17 @@ import { comprimirImagem } from "../foto.js";
 import { esc, temaCurto, posicaoDoTema, dataCurta, horaTexto, toast, abrirFolha, perguntar } from "../ui/util.js";
 import { conteudoPrevisto, pintarFoto } from "./comum.js";
 import { irPara } from "../app.js";
+import { avaliarLocal, distanciaTexto, ACADEMIA } from "../logica/local.js";
+
+// Pede a posição ao celular (o próprio sistema pergunta se pode usar a localização).
+function pegarPosicao() {
+  return new Promise((ok, falha) => {
+    if (!navigator.geolocation) return falha({ code: 99 });
+    navigator.geolocation.getCurrentPosition(
+      p => ok({ lat: p.coords.latitude, lng: p.coords.longitude, precisao: p.coords.accuracy }),
+      falha, { enableHighAccuracy: true, timeout: 15000, maximumAge: 30000 });
+  });
+}
 
 const RES = [["nao", "Não saiu", "bad"], ["asvezes", "Às vezes", "mid"], ["bem", "Saiu bem", "good"]];
 
@@ -54,6 +65,33 @@ export default {
     };
     if (!editando && f.programa !== "a definir") recalcularPrevista();
 
+    // ---------- localização: o check-in de hoje só vale na academia ----------
+    const loc = { estado: "parado" };
+    const precisaLocal = () => !editando && data === hoje;
+    async function verificarLocal() {
+      loc.estado = "buscando"; if (el.isConnected && el.querySelector("#salvar")) { guardarTextos(); desenhar(); }
+      try {
+        Object.assign(loc, avaliarLocal(await pegarPosicao()));
+        loc.estado = loc.ok ? "ok" : "longe";
+      } catch (err) {
+        loc.estado = "erro";
+        loc.motivo = err?.code === 1 ? "negado" : err?.code === 3 ? "tempo" : "sem";
+      }
+      if (el.isConnected) { guardarTextos(); desenhar(); }
+    }
+    const avisoLocal = () => {
+      if (editando) return "";
+      if (!precisaLocal()) return `<div class="local neutro"><span>📍 Aula de outro dia: fica marcada como <b>sem local</b>.</span></div>`;
+      const tentar = '<button type="button" class="local-tentar" id="localTentar">Tentar de novo</button>';
+      if (loc.estado === "ok") return `<div class="local ok"><span>📍 Você está na academia <small>(${distanciaTexto(loc.distancia)})</small></span></div>`;
+      if (loc.estado === "longe") return `<div class="local ruim"><span>📍 Você está a <b>${distanciaTexto(loc.distancia)}</b> da academia. O check-in só vale a até ${ACADEMIA.raio} m da ${ACADEMIA.nome}.</span>${tentar}</div>`;
+      if (loc.estado === "erro") return `<div class="local ruim"><span>📍 ${loc.motivo === "negado"
+        ? "Libere a localização para fazer o check-in: Ajustes › Privacidade › Serviços de Localização › Sites do Safari › Perguntar ou Permitir."
+        : loc.motivo === "tempo" ? "O GPS demorou para responder. Vá para um lugar aberto ou perto da porta."
+        : "Este aparelho não informou a localização."}</span>${tentar}</div>`;
+      return `<div class="local buscando"><span>📍 Conferindo se você está na academia…</span></div>`;
+    };
+
     // ---------- desenho ----------
     function desenhar() {
       const definido = f.programa === "GB1" || f.programa === "GB2";
@@ -66,6 +104,7 @@ export default {
 
       el.innerHTML = `
         <div class="ttl"><a class="back" href="#inicio" aria-label="Voltar">←</a>${editando ? "Editar aula" : "Check-in"}</div>
+        ${avisoLocal()}
         <div class="plan">
           <div class="k">${modo === "novo" || editando ? `<input id="data" type="date" value="${data}" max="${hoje}" aria-label="Data da aula" style="background:transparent;border:0;color:#fff;font:inherit;width:128px;color-scheme:dark"> · ` : dataCurta(data) + " · "}${modo === "novo" ? `<input id="hora" type="time" value="${esc(f.horario)}" aria-label="Horário" style="background:transparent;border:0;color:#fff;font:inherit;width:72px;color-scheme:dark">` : horaTexto(esc(f.horario))}${f.professor ? " · " + esc(f.professor) : ""}</div>
           ${!programaFixo ? `
@@ -165,6 +204,7 @@ export default {
         desenhar();
       };
       el.querySelector("#salvar").onclick = salvar;
+      const tentar = el.querySelector("#localTentar"); if (tentar) tentar.onclick = () => verificarLocal();
     }
 
     function escolherOutra() {
@@ -221,7 +261,12 @@ export default {
       const erro = el.querySelector("#erro");
       const definido = f.programa === "GB1" || f.programa === "GB2";
       const falta = !definido ? "Escolha GB1 ou GB2." : !f.temaLivre && !f.sel?.aula ? "Escolha a aula A ou B." : !f.dificuldade ? "Escolha a dificuldade da aula." : "";
-      if (falta) { erro.textContent = falta; erro.hidden = false; erro.scrollIntoView({ block: "center" }); return; }
+      const semLocal = precisaLocal() && loc.estado !== "ok"
+        ? (loc.estado === "buscando" ? "Espere: ainda estou conferindo se você está na academia." : `O check-in de hoje só vale na academia (até ${ACADEMIA.raio} m).`) : "";
+      if (falta || semLocal) {
+        erro.textContent = falta || semLocal; erro.hidden = false; erro.scrollIntoView({ block: "center" });
+        return;
+      }
       const btn = el.querySelector("#salvar");
       btn.disabled = true; btn.textContent = "Salvando…";
       try {
@@ -240,7 +285,10 @@ export default {
           realizada,
           tecnicas: f.tecnicas.filter(t => t.resultado).map(({ nome, categoria, resultado }) => ({ nome, categoria, resultado })),
           dificuldade: f.dificuldade, aprendi: f.aprendi.trim(), revisar: f.revisar.trim(),
-          rolaSofri: f.rolaSofri, fotoId, fotoMini
+          rolaSofri: f.rolaSofri, fotoId, fotoMini,
+          // Onde foi feito o check-in: confirmado na academia, ou lançado depois (sem local).
+          ...(editando ? (editando.local ? { local: editando.local } : {})
+            : { local: precisaLocal() ? { verificado: true, distancia: loc.distancia, precisao: loc.precisao } : { verificado: false } })
         };
         const id = await salvarAula(e.uid, aula);
         // a foto antiga só sai depois que a aula já aponta para a nova
@@ -284,5 +332,6 @@ export default {
     }
 
     desenhar();
+    if (!editando) verificarLocal();
   }
 };
