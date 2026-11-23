@@ -34,7 +34,7 @@ export default {
     }).join("");
 
     el.innerHTML = `
-      <div class="ttl">Diário</div>
+      <div class="ttl ttl-alto">Diário</div>
       <div class="chips">${FILTROS.map(([v, t]) => `<button class="chip ${filtro === v ? "on" : ""}" data-f="${v}">${t}</button>`).join("")}</div>
       ${revisar.length ? `<div class="review"><div class="k" style="color:var(--red)">Para revisar</div>
         <h4>${revisar.length} ${revisar.length === 1 ? "técnica" : "técnicas"} para treinar de novo</h4>

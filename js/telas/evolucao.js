@@ -79,7 +79,7 @@ export default {
     if (params[0] && ["historico", "frequencia", "jogo"].includes(params[0])) aba = params[0];
     if (!mesVisto) { const h = deISO(hoje); mesVisto = { ano: h.ano, mes: h.mes }; }
     const corpo = aba === "historico" ? historico(e, hoje) : aba === "frequencia" ? frequencia(e, hoje) : meuJogo(e);
-    el.innerHTML = `<div class="ttl">${aba === "jogo" ? "Meu jogo" : "Evolução"}</div>${corpo}`;
+    el.innerHTML = `<div class="ttl ttl-alto">${aba === "jogo" ? "Meu jogo" : "Evolução"}</div>${corpo}`;
     el.querySelectorAll("[data-aba]").forEach(b => b.onclick = () => { aba = b.dataset.aba; this.montar(el, [], ctx); });
     el.querySelectorAll("[data-m]").forEach(b => b.onclick = () => {
       let { ano, mes } = mesVisto; mes += Number(b.dataset.m);
