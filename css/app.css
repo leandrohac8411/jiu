@@ -265,7 +265,8 @@ textarea.input{min-height:72px;resize:vertical}
 .need.good .bar i{background:var(--good)}
 
 /* Perfil */
-.pf{display:flex;flex-direction:column;align-items:center;gap:6px;margin-top:4px}
+.pf{position:relative;display:flex;flex-direction:column;align-items:center;gap:6px;margin-top:4px}
+.pf-logo{position:absolute;left:0;top:0;width:60px;height:60px}
 .pf .foto{width:84px;height:84px;font-size:32px}
 .pf .foto i{width:26px;height:26px;font-size:12px}
 .pf h3{margin:8px 0 0;font-size:20px}
