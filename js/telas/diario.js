@@ -54,6 +54,7 @@ export default {
     el.querySelectorAll("[data-up]").forEach(inp => inp.onchange = async ev => {
       const file = ev.target.files?.[0]; if (!file) return;
       const aula = e.aulas.find(a => a.id === inp.dataset.up);
+      if (!aula || aula.local?.verificado === false) { toast("Só dá para pôr foto em aula com check-in."); return; }
       try {
         const foto = await comprimirImagem(file, 1000, 250_000);
         const fotoMini = (await comprimirImagem(file, 160, 12_000)).dados;

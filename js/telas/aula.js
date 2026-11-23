@@ -33,7 +33,7 @@ export default {
         ${a.aprendi ? `<div class="card"><div class="k">O que aprendi</div><div class="txt">${esc(a.aprendi)}</div></div>` : ""}
         ${a.revisar ? `<div class="card"><div class="k" style="color:var(--red)">Revisar</div><div class="txt">${esc(a.revisar)}</div></div>` : ""}
         ${a.rolaSofri?.length ? `<div class="card"><div class="k">No rola, sofri em</div><div class="txt">${a.rolaSofri.map(esc).join(", ")}</div></div>` : ""}
-        <a class="btn ghost" href="#checkin/editar/${a.id}" style="text-decoration:none">Editar aula</a>
+        ${a.local?.verificado === false ? "" : `<a class="btn ghost" href="#checkin/editar/${a.id}" style="text-decoration:none">Editar aula</a>`}
         <button class="out" id="del">Excluir aula</button>
       </div>`;
     const hero = el.querySelector("#hero");

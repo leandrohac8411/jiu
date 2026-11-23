@@ -1,4 +1,5 @@
-// Check-in de uma aula: #checkin/<turmaId>/<data>, #checkin/novo/<data> ou #checkin/editar/<aulaId>
+// Check-in de uma aula: #checkin/<turmaId>/<data>, #checkin/novo/<data> ou #checkin/editar/<aulaId>.
+// O check-in (aula nova) só vale no dia e a até 50 m da academia; editar depois pode, só aula com check-in.
 import { hojeISO, dataValida } from "../logica/datas.js";
 import { mesclarTecnicas } from "../logica/tecnicas.js";
 import { aulaPrevista, sugerirFixarAula, CICLO_SEMANAS } from "../logica/ciclo.js";
@@ -29,10 +30,20 @@ export default {
     const [modo, arg] = params;
     const editando = modo === "editar" ? e.aulas.find(a => a.id === arg) : null;
     if (modo === "editar" && !editando) { el.innerHTML = '<p class="vazio">Aula não encontrada.</p>'; return; }
+    const hoje = hojeISO();
+    // Regra: check-in só no dia da aula e na academia. Editar depois pode, mas só aula com check-in.
+    const bloqueio = editando && editando.local?.verificado === false
+      ? "Esta aula foi lançada sem check-in na academia, então não dá para editar."
+      : !editando && dataValida(arg) && arg !== hoje
+        ? "O check-in só vale no dia da aula, na academia. Não dá para lançar uma aula de outro dia." : "";
+    if (bloqueio) {
+      el.innerHTML = `<div class="ttl"><a class="back" href="#inicio" aria-label="Voltar">←</a>Check-in</div>
+        <div class="local ruim"><span>📍 ${bloqueio}</span></div><a class="btn ghost" href="#inicio" style="text-decoration:none">Voltar ao início</a>`;
+      return;
+    }
     const turma = editando ? e.grade.find(t => t.id === editando.turmaId) || null
       : modo === "novo" ? null : e.grade.find(t => t.id === modo) || null;
-    const hoje = hojeISO();
-    let data = editando ? editando.data : (dataValida(arg) && arg <= hoje ? arg : hoje);
+    const data = editando ? editando.data : hoje;
     const programaFixo = !editando && modo !== "novo" && (turma?.programa === "GB1" || turma?.programa === "GB2");
 
     // ---------- estado do formulário ----------
@@ -67,7 +78,7 @@ export default {
 
     // ---------- localização: o check-in de hoje só vale na academia ----------
     const loc = { estado: "parado" };
-    const precisaLocal = () => !editando && data === hoje;
+    const precisaLocal = () => !editando;
     async function verificarLocal() {
       loc.estado = "buscando"; if (el.isConnected && el.querySelector("#salvar")) { guardarTextos(); desenhar(); }
       try {
@@ -81,7 +92,6 @@ export default {
     }
     const avisoLocal = () => {
       if (editando) return "";
-      if (!precisaLocal()) return `<div class="local neutro"><span>📍 Aula de outro dia: fica marcada como <b>sem local</b>.</span></div>`;
       const tentar = '<button type="button" class="local-tentar" id="localTentar">Tentar de novo</button>';
       if (loc.estado === "ok") return `<div class="local ok"><span>📍 Você está na academia <small>(${distanciaTexto(loc.distancia)})</small></span></div>`;
       if (loc.estado === "longe") return `<div class="local ruim"><span>📍 Você está a <b>${distanciaTexto(loc.distancia)}</b> da academia. O check-in só vale a até ${ACADEMIA.raio} m da ${ACADEMIA.nome}.</span>${tentar}</div>`;
@@ -106,7 +116,7 @@ export default {
         <div class="ttl"><a class="back" href="#inicio" aria-label="Voltar">←</a>${editando ? "Editar aula" : "Check-in"}</div>
         ${avisoLocal()}
         <div class="plan">
-          <div class="k">${modo === "novo" || editando ? `<input id="data" type="date" value="${data}" max="${hoje}" aria-label="Data da aula" style="background:transparent;border:0;color:#fff;font:inherit;width:128px;color-scheme:dark"> · ` : dataCurta(data) + " · "}${modo === "novo" ? `<input id="hora" type="time" value="${esc(f.horario)}" aria-label="Horário" style="background:transparent;border:0;color:#fff;font:inherit;width:72px;color-scheme:dark">` : horaTexto(esc(f.horario))}${f.professor ? " · " + esc(f.professor) : ""}</div>
+          <div class="k">${dataCurta(data) + " · "}${modo === "novo" ? `<input id="hora" type="time" value="${esc(f.horario)}" aria-label="Horário" style="background:transparent;border:0;color:#fff;font:inherit;width:72px;color-scheme:dark">` : horaTexto(esc(f.horario))}${f.professor ? " · " + esc(f.professor) : ""}</div>
           ${!programaFixo ? `
             <p style="margin:8px 0 4px">${turma?.programa === "GB1+GB2" ? "Turma GB1 + GB2: qual currículo foi dado?" : "Qual programa?"}</p>
             <div class="yn">${["GB1", "GB2"].map(p => {
@@ -164,16 +174,10 @@ export default {
       f.revisar = el.querySelector("#revisar")?.value ?? f.revisar;
       f.duracaoMin = Number(el.querySelector("#dur")?.value) || f.duracaoMin;
       const h = el.querySelector("#hora"); if (h) f.horario = h.value || f.horario;
-      const d = el.querySelector("#data");
-      if (d && dataValida(d.value) && d.value <= hoje && d.value !== data) {
-        data = d.value;
-        if (!editando && (f.programa === "GB1" || f.programa === "GB2")) recalcularPrevista();
-      }
     };
     const redesenhar = () => { guardarTextos(); desenhar(); };
 
     function ligar() {
-      const campoData = el.querySelector("#data"); if (campoData) campoData.onchange = () => redesenhar();
       el.querySelectorAll("[data-prog]").forEach(b => b.onclick = () => { f.programa = b.dataset.prog; recalcularPrevista(); redesenhar(); });
       el.querySelectorAll("[data-ab]").forEach(b => b.onclick = () => { f.sel.aula = b.dataset.ab; carregarTecnicasDoCurriculo(); redesenhar(); });
       const essa = el.querySelector("#essa");
@@ -288,7 +292,7 @@ export default {
           rolaSofri: f.rolaSofri, fotoId, fotoMini,
           // Onde foi feito o check-in: confirmado na academia, ou lançado depois (sem local).
           ...(editando ? (editando.local ? { local: editando.local } : {})
-            : { local: precisaLocal() ? { verificado: true, distancia: loc.distancia, precisao: loc.precisao } : { verificado: false } })
+            : { local: { verificado: true, distancia: loc.distancia, precisao: loc.precisao } })
         };
         const id = await salvarAula(e.uid, aula);
         // a foto antiga só sai depois que a aula já aponta para a nova
