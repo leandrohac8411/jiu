@@ -3,6 +3,7 @@ import { categoriaIdade, categoriaPeso } from "../logica/categorias.js";
 import { CATEGORIAS } from "../logica/meujogo.js";
 import { salvarPerfil, salvarFoto, excluirFoto, listarPesos, registrarPeso, importarCurriculo } from "../dados.js";
 import { comprimirImagem } from "../foto.js";
+import { gradeParaExportar } from "../logica/exportar-grade.js";
 import { sairELimpar } from "../firebase.js";
 import { faixaSVG } from "../ui/faixa.js";
 import { esc, iniciais, numero, dataLonga, abrirFolha, perguntar, toast, nomeMes } from "../ui/util.js";
@@ -42,6 +43,7 @@ export default {
         <button id="roxa"><span>Aulas até a roxa</span><b>${p.metaAulasRoxa} ›</b></button>
         <button id="dados"><span>Dados pessoais</span><b>›</b></button>
         <button id="curriculo"><span>Importar currículo</span><b>›</b></button>
+        <button id="exportar-grade"><span>Exportar grade para o GB Admin</span><b>›</b></button>
       </div>
       <button class="btn sair" id="sair"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 4H6a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h4"/><path d="M21 12H10M17 8l4 4-4 4"/></svg><span>Sair da conta</span></button>`;
 
@@ -105,6 +107,16 @@ export default {
     $("dados").onclick = abrirDados;
 
     $("curriculo").onclick = () => importar();
+    // Baixa a grade (só turmas ativas, sem dados internos) para importar no GB Admin.
+    $("exportar-grade").onclick = () => {
+      const dados = gradeParaExportar(e.grade);
+      if (!dados.turmas.length) return toast("A grade está vazia.");
+      const url = URL.createObjectURL(new Blob([JSON.stringify(dados, null, 2)], { type: "application/json" }));
+      const a = document.createElement("a");
+      a.href = url; a.download = "grade-diario.json"; document.body.appendChild(a); a.click(); a.remove();
+      setTimeout(() => URL.revokeObjectURL(url), 10000);
+      toast(`Grade exportada: ${dados.turmas.length} turmas.`);
+    };
     $("sair").onclick = async () => { if (await perguntar("Sair do app?", "Os dados deste aparelho serão apagados; continuam salvos na sua conta.", "Sair", "Cancelar")) sairELimpar(); };
   }
 };

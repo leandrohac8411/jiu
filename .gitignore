@@ -5,3 +5,4 @@ tools/carga/curriculo.json
 tools/carga/service-account.json
 *.log
 dev/
+grade-diario.json
