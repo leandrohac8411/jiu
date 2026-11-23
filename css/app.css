@@ -300,17 +300,12 @@ textarea.input{min-height:72px;resize:vertical}
 .topo-kimono{position:absolute;z-index:-1;inset:0 0 auto 0;height:126px;
   background:linear-gradient(90deg,var(--bg) 0%,rgba(250,249,248,.9) 42%,rgba(250,249,248,.35) 60%,rgba(250,249,248,0) 72%),url(../img/topo-kimono.jpg) right -34px top/auto 122px no-repeat;
   -webkit-mask-image:linear-gradient(#000 58%,transparent);mask-image:linear-gradient(#000 58%,transparent)}
-.topo-marca{display:flex;align-items:center;gap:9px;min-height:46px}
-.tm-logo{width:40px;height:40px;flex:none;background:url(../img/logo-gb-mark.png) center/contain no-repeat;filter:drop-shadow(0 2px 3px #0000001f)}
-.tm-gb{display:flex;flex-direction:column;line-height:1.05}
-.tm-gb b{font-size:12.5px;font-weight:800;letter-spacing:.01em;padding-bottom:3px;border-bottom:2px solid var(--red)}
-.tm-gb small{font-size:9.5px;font-weight:700;letter-spacing:.06em;margin-top:3px}
-.tm-app{font-size:14px;font-weight:800;line-height:1.12;padding-left:10px;margin-left:2px;border-left:1.5px solid var(--fg)}
-.topo-ini .hrow{margin-top:26px;align-items:flex-end}
-.topo-ini .who small{font-size:15px;color:var(--fg)}
-.topo-ini .who b{font-size:29px;letter-spacing:-.5px;margin-top:2px}
+.topo-ini .hrow{margin-top:14px;gap:12px}
+.topo-ini .logo{width:60px;height:60px}
+.topo-ini .who small{font-family:"Barlow",system-ui,sans-serif;font-weight:500;font-size:17px;color:var(--muted2);letter-spacing:.1px}
+.topo-ini .who b{font-family:"Barlow Condensed",system-ui,sans-serif;font-weight:700;font-size:38px;line-height:1;letter-spacing:.2px;margin-top:1px}
 .topo-ini .who b::after{width:38px;height:4px;margin-top:8px}
-.topo-ini .foto{width:70px;height:70px;font-size:26px;margin-bottom:4px}
+.topo-ini .foto{width:70px;height:70px;font-size:26px}
 .topo-ini .foto i{width:24px;height:24px;font-size:12px;border-radius:7px}
 
 .card-grade{background:#fff;border:1px solid var(--line);border-radius:18px;padding:14px;box-shadow:0 4px 14px #0000000a;display:flex;flex-direction:column;gap:12px}
@@ -326,6 +321,6 @@ textarea.input{min-height:72px;resize:vertical}
 .card-grade .cls{border-top:1px solid var(--line);padding-top:12px}
 .card-grade .row{background:#fcfbfa}
 .cg-vazio{display:flex;align-items:center;justify-content:center;gap:18px;border-top:1px solid var(--line);padding:14px 4px 4px}
-.cg-vazio .kimono{width:46px;height:46px;color:#9a9599;stroke-width:1.5}
+.cg-vazio .kimono{width:62px;height:46px;color:#8f8a8e;stroke-width:1.6}
 .cg-vazio p{margin:0;padding-left:18px;border-left:1px solid var(--line);font-size:14px;color:var(--muted2);line-height:1.35}
 .cg-vazio b{display:block;color:var(--fg)}

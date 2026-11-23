@@ -7,7 +7,7 @@ import { esc, temaCurto, saudacao, iniciais, horaTexto, numero } from "../ui/uti
 import { turmasDoDia, conteudoPrevisto, pintarFoto, minutosAgora, minutosDe } from "./comum.js";
 
 const CAL = '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M3 10h18M8 3v4M16 3v4"/><path d="M7.5 14h3M13.5 14h3M7.5 17.5h3"/></svg>';
-const KIMONO = '<svg class="kimono" viewBox="0 0 48 48" aria-hidden="true"><path d="M17 6h14l9 7-5 7v22H13V20l-5-7z"/><path d="m17 6 7 12 7-12M24 18v24M13 27h22"/></svg>';
+const KIMONO = '<svg class="kimono" viewBox="0 0 64 48" aria-hidden="true"><path d="M24 5h16l4 2 14 9-6 11-6-3v19H18V24l-6 3-6-11 14-9z"/><path d="m24 5 8 13 8-13M32 18v25"/><path d="M26 6.5 32 18l-8 10M38 6.5 32 18"/><path d="M18 30h28"/><path d="m29 30-3 8M35 30l3 8"/><path d="M14 18.5 18 24M50 18.5 46 24"/></svg>';
 const DIAS = ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"];
 const MESES = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"];
 const dataExtenso = iso => { const [a, m, d] = iso.split("-").map(Number); return `${DIAS[new Date(Date.UTC(a, m - 1, d)).getUTCDay()]}, ${d} de ${MESES[m - 1]}`; };
@@ -53,12 +53,8 @@ export default {
     el.innerHTML = `
       <header class="topo-ini">
         <div class="topo-kimono" aria-hidden="true"></div>
-        <div class="topo-marca">
-          <span class="tm-logo" role="img" aria-label="Gracie Barra"></span>
-          <span class="tm-gb"><b>GRACIE BARRA</b><small>GB SOBRADINHO</small></span>
-          <span class="tm-app">Diário de<br>Tatame</span>
-        </div>
         <div class="hrow">
+          <div class="logo" role="img" aria-label="GB Sobradinho"></div>
           <div class="who"><small>${saudacao()}</small><b>${esc(perfil.nome)}</b></div>
           <a href="#perfil" class="foto" id="foto" aria-label="Perfil"><span class="ini">${esc(iniciais(perfil.nome))}</span><i>📷</i></a>
         </div>
