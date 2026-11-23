@@ -3,8 +3,14 @@ import { aulaPrevista, semanaDoCiclo } from "../logica/ciclo.js";
 import { progressoRoxa, progressoSemana, progressoMes, horasTatame } from "../logica/metas.js";
 import { faixaSVG } from "../ui/faixa.js";
 import { anelSVG } from "../ui/graficos.js";
-import { esc, temaCurto, saudacao, iniciais, dataCurta, horaTexto, numero } from "../ui/util.js";
+import { esc, temaCurto, saudacao, iniciais, horaTexto, numero } from "../ui/util.js";
 import { turmasDoDia, conteudoPrevisto, pintarFoto, minutosAgora, minutosDe } from "./comum.js";
+
+const CAL = '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M3 10h18M8 3v4M16 3v4"/><path d="M7.5 14h3M13.5 14h3M7.5 17.5h3"/></svg>';
+const KIMONO = '<svg class="kimono" viewBox="0 0 48 48" aria-hidden="true"><path d="M17 6h14l9 7-5 7v22H13V20l-5-7z"/><path d="m17 6 7 12 7-12M24 18v24M13 27h22"/></svg>';
+const DIAS = ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"];
+const MESES = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"];
+const dataExtenso = iso => { const [a, m, d] = iso.split("-").map(Number); return `${DIAS[new Date(Date.UTC(a, m - 1, d)).getUTCDay()]}, ${d} de ${MESES[m - 1]}`; };
 
 export default {
   menu: "inicio",
@@ -45,11 +51,18 @@ export default {
     }).join("");
 
     el.innerHTML = `
-      <div class="hrow">
-        <div class="logo" role="img" aria-label="Gracie Barra"></div>
-        <div class="who"><small>${saudacao()}</small><b>${esc(perfil.nome)}</b></div>
-        <a href="#perfil" class="foto" id="foto" aria-label="Perfil"><span class="ini">${esc(iniciais(perfil.nome))}</span><i>📷</i></a>
-      </div>
+      <header class="topo-ini">
+        <div class="topo-kimono" aria-hidden="true"></div>
+        <div class="topo-marca">
+          <span class="tm-logo" role="img" aria-label="Gracie Barra"></span>
+          <span class="tm-gb"><b>GRACIE BARRA</b><small>GB SOBRADINHO</small></span>
+          <span class="tm-app">Diário de<br>Tatame</span>
+        </div>
+        <div class="hrow">
+          <div class="who"><small>${saudacao()}</small><b>${esc(perfil.nome)}</b></div>
+          <a href="#perfil" class="foto" id="foto" aria-label="Perfil"><span class="ini">${esc(iniciais(perfil.nome))}</span><i>📷</i></a>
+        </div>
+      </header>
       <div class="beltwrap">${faixaSVG(graus)}<div class="lbl"><span>Faixa azul</span><span>${graus} de 4 graus</span></div></div>
       <div class="prog">
         <div class="ptop">
@@ -63,8 +76,10 @@ export default {
           <div><b>${numero(horas)}h</b><small>Tatame</small></div>
         </div>
       </div>
-      <div class="sec"><span>Grade de hoje · ${dataCurta(hoje)}</span>${semGB1 ? `<span style="color:var(--red)">Semana ${semGB1}</span>` : ""}</div>
-      <div class="cls">${linhas || '<p class="vazio">Sem treino hoje. Bom descanso!</p>'}</div>
+      <section class="card-grade">
+        <div class="cg-cab"><span class="cg-ic">${CAL}</span><div class="cg-tit"><b>Grade de hoje</b><small>${dataExtenso(hoje)}</small></div>${semGB1 ? `<span class="selo-sem">${CAL}Semana ${semGB1}</span>` : ""}</div>
+        ${linhas ? `<div class="cls">${linhas}</div>` : `<div class="cg-vazio">${KIMONO}<p><b>Sem treino hoje.</b>Bom descanso!</p></div>`}
+      </section>
       <a class="link" href="#checkin/novo/${hoje}" style="text-align:center">+ Check-in de aula fora da grade</a>`;
     pintarFoto(e.uid, perfil.fotoPerfilId, el.querySelector("#foto"));
   }
